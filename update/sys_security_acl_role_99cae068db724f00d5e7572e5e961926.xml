@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_security_acl_role">
+    <sys_security_acl_role action="INSERT_OR_UPDATE">
+        <sys_class_name>sys_security_acl_role</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2017-11-29 11:30:20</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>99cae068db724f00d5e7572e5e961926</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>x_dynat_ruxit_environments.x_dynat_ruxit.Integration</sys_name>
+        <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
+        <sys_security_acl display_value="x_dynat_ruxit_environments">5dcae068db724f00d5e7572e5e961923</sys_security_acl>
+        <sys_update_name>sys_security_acl_role_99cae068db724f00d5e7572e5e961926</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2017-11-29 11:32:52</sys_updated_on>
+        <sys_user_role display_value="x_dynat_ruxit.Integration" name="x_dynat_ruxit.Integration">4c0702574fb75a00dbec7bb28110c7b2</sys_user_role>
+        <transaction_id/>
+    </sys_security_acl_role>
+</record_update>

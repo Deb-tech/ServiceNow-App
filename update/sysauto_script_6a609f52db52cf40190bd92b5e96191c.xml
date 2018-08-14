@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Dynatrace CMDB Sync</name>
+        <run_as display_value="System Administrator">6816f79cc0a8016401c5a33be04be441</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1970-01-01 00:10:00</run_period>
+        <run_start>2017-11-10 13:32:02</run_start>
+        <run_time>1969-12-31 23:01:00</run_time>
+        <run_type>periodically</run_type>
+        <script><![CDATA[function extractTags(tj) {
+	var sb = [];
+	for(i = 0; i < tj.length; i++) {
+		t = "";
+		if(tj[i]['context'].toLowerCase() !== 'contextless'){
+			t = '[' + tj[i]['context'] + ']';
+		}
+		t += tj[i]['key'];
+		if(tj[i]['value']) {
+			t += ':' + tj[i]['value'];
+		}
+		sb.push(t);
+	}
+	return sb.join();
+	//gs.error(sb.join());
+	//gs.error(JSON.stringify(tj));
+}
+
+// fetches all services and applications from Dynatrace API and 
+// creates or updates SNOW business services
+// Services and apps are tagged filtered.
+function pushServicesAndApps(tagFilter, apiUrl, token, pgs) {
+	var pl = {};
+	pl['items'] = [];
+	pl['relations'] = [];
+	var items = {};
+	var restMessage = new sn_ws.RESTMessageV2();
+	// restMessage.setMIDServer('mid_dynatrace');
+	var servicesUrl = apiUrl + "/api/v1/entity/services/?" + tagFilter;
+	restMessage.setHttpMethod('get');
+	restMessage.setRequestHeader('Authorization', 'Api-Token ' + token);
+	restMessage.setEndpoint(servicesUrl);
+	var response = restMessage.execute();
+	status = response.getStatusCode();
+	if(status == 200) {
+		var p = new global.JSON().decode(response.getBody());		
+		for (var i = 0; i < p.length; i++) { 
+			items[p[i]['entityId']] = p[i];
+		}	
+	}
+	else {
+		gs.debug("Dynatrace app failed to pull services with HTTP status: " + status);
+	}
+	var appsUrl = apiUrl + "/api/v1/entity/applications/?" + tagFilter;
+	restMessage.setHttpMethod('get');
+	restMessage.setRequestHeader('Authorization', 'Api-Token ' + token);
+	restMessage.setEndpoint(appsUrl);
+	response = restMessage.execute();
+	status = response.getStatusCode();
+	if(status == 200) {
+		var a = new global.JSON().decode(response.getBody());		
+		for (var j = 0; j < a.length; j++) { 
+			items[a[j]['entityId']] = a[j];
+		}	
+	}
+	else {
+		gs.debug("Dynatrace app failed to pull applications with HTTP status: " + status);
+	}
+	gs.debug("Items: " + Object.keys(items).length);
+	for (var key in items) {
+		var index = 1;
+		var item = {};
+		item['className'] = 'cmdb_ci_service_manual';
+		var values = {};
+		values['name'] = items[key]['displayName'];
+		values['correlation_id'] = items[key]['entityId'];
+		values['operational_status'] = 1;
+		values['comments'] = extractTags(items[key]['tags']);
+		item['values'] = values;
+		
+		// add new item to payload and store its payload index
+		pl['items'].push(item);
+		// now add the service relationships
+		// calls relationship
+		if(items[key]['toRelationships'] && items[key]['toRelationships']['calls']) {
+			for(var rel in items[key]['toRelationships']['calls']) {
+				var relKey = items[key]['toRelationships']['calls'][rel];
+				if(items[relKey]) {
+					// add related item to the item list
+					var relItem = {};
+					relItem['className'] = 'cmdb_ci_service_manual';
+					var relValues = {};
+					relValues['name'] = items[relKey]['displayName'];
+					relValues['correlation_id'] = items[relKey]['entityId'];
+					relItem['values'] = relValues;
+					pl['items'].push(relItem);
+					// now enter the relationship
+					var relation = {};
+					relation['type'] = 'Depends on::Used by';
+					relation['parent'] = index; // always the parent service
+					relation['child'] = 0; // the related service index
+					// add new item to payload and store its payload index
+					// {"parent": "0", "child": "1", "type": "Depends on::Used by"}
+					pl['relations'].push(relation);
+					index++;
+				}
+			}
+		}
+		// runs on process group relationship
+		if(items[key]['fromRelationships'] && items[key]['fromRelationships']['runsOn']) {
+			for(var relRuns in items[key]['fromRelationships']['runsOn']) {
+				var relRunsKey = items[key]['fromRelationships']['runsOn'][relRuns];
+				if(pgs[relRunsKey]) {
+					// add related item to the item list
+					var relRunsItem = {};
+					relRunsItem['className'] = 'cmdb_ci_cluster';
+					var relRunsValues = {};
+					relRunsValues['name'] = pgs[relRunsKey]['displayName'];
+					relRunsValues['correlation_id'] = relRunsKey;
+					relRunsItem['values'] = relRunsValues;
+					pl['items'].push(relRunsItem);
+					// now enter the relationship
+					var relationRuns = {};
+					relationRuns['type'] = 'Runs on::Runs';
+					relationRuns['parent'] = 0; // always the parent service
+					relationRuns['child'] = index; // the related process group index
+					pl['relations'].push(relationRuns);
+					index++;
+				}
+			}
+		}
+		// gs.debug("Payload: " + global.JSON.stringify(pl));
+		// send the result to the identification and reconciliation Engine
+		var input = new global.JSON().encode(pl);
+		var output = sn_cmdb.IdentificationEngine.createOrUpdateCI("DYNATRACE", input);
+		// empty payload for next service
+		pl['items'] = [];
+		pl['relations'] = [];
+	}
+}
+
+// pull processes list
+function getProcesses(apiUrl, token) {
+	var procRes = {};
+	var processesUrl = apiUrl + "/api/v1/entity/infrastructure/processes/?";
+	var restMessage = new sn_ws.RESTMessageV2();
+	// restMessage.setMIDServer('mid_dynatrace');
+	restMessage.setHttpMethod('get');
+	restMessage.setRequestHeader('Authorization', 'Api-Token ' + token);
+	restMessage.setEndpoint(processesUrl);
+	response = restMessage.execute();
+	status = response.getStatusCode();
+	if(status == 200) {
+		var processes = new global.JSON().decode(response.getBody());		
+		for (var process in processes) { 
+			procRes[processes[process]['entityId']] = processes[process];
+		}	
+	}
+	else {
+		gs.debug("Dynatrace app failed to pull processes with HTTP status: " + status);
+	}
+	gs.debug("Processes: " + Object.keys(procRes).length);
+	return procRes;
+}
+
+// pull process groups list
+function getProcessGroups(tagFilter, apiUrl, token) {
+	var res = {};
+	var processGroupUrl = apiUrl + "/api/v1/entity/infrastructure/process-groups/?" + tagFilter;
+	var restMessage = new sn_ws.RESTMessageV2();
+	// restMessage.setMIDServer('mid_dynatrace');
+	restMessage.setHttpMethod('get');
+	restMessage.setRequestHeader('Authorization', 'Api-Token ' + token);
+	restMessage.setEndpoint(processGroupUrl);
+	response = restMessage.execute();
+	status = response.getStatusCode();
+	if(status == 200) {
+		var pgs = new global.JSON().decode(response.getBody());		
+		for (var pKey in pgs) { 
+			res[pgs[pKey]['entityId']] = pgs[pKey];
+		}	
+	}
+	else {
+		gs.debug("Dynatrace app failed to pull process groups with HTTP status: " + status);
+	}
+	gs.debug("Process groups: " + Object.keys(res).length);
+	return res;
+}
+
+// fetches all hosts, processes and process groups from Dynatrace API and 
+// creates or updates SNOW server, web servers and clusters
+// Hosts and their relationships are tagged filtered.
+function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs) {
+	var hostTypes = {'LINUX' : 'cmdb_ci_linux_server', 'WINDOWS' : 'cmdb_ci_win_server', 'AIX' : 'cmdb_ci_aix_server'};
+	var pl = {};
+	pl['items'] = [];
+	pl['relations'] = [];
+	var hosts = {};
+	var processes = {};
+	var restMessage = new sn_ws.RESTMessageV2();
+	// restMessage.setMIDServer('mid_dynatrace');
+	var hostsUrl = apiUrl + "/api/v1/entity/infrastructure/hosts?" + tagFilter;
+	restMessage.setHttpMethod('get');
+	restMessage.setRequestHeader('Authorization', 'Api-Token ' + token);
+	restMessage.setEndpoint(hostsUrl);
+	var response = restMessage.execute();
+	status = response.getStatusCode();
+	if(status == 200) {
+		var p = new global.JSON().decode(response.getBody());	
+		for (var i = 0; i < p.length; i++) { 
+			var itemIndex = 1;
+			var key = p[i]['entityId'];
+			hosts[key] = p[i];
+			var item = {};
+			item['className'] = hostTypes[p[i]['osType']];
+			// fill discovered host attributes
+			var values = {};
+			values['name'] = hosts[key]['displayName'];
+			values['correlation_id'] = key;
+			values['os'] = hosts[key]['osType'];
+			values['os_version'] = hosts[key]['osVersion'];
+			values['cpu_type'] = hosts[key]['osArchitecture'];
+			values['cpu_count'] = hosts[key]['cpuCores'];
+			values['ip_address'] = hosts[key]['ipAddresses'][0]; // enter first IP directly
+			values['comments'] = extractTags(hosts[key]['tags']);
+			item['values'] = values;
+			
+			// add new item to payload and store its payload index
+			pl['items'].push(item);
+			// create related items and relationships
+			for(var ipAdrKey in hosts[key]['ipAddresses']) {
+				// create an ip address CI (cmdb_ci_ip_address)
+				var ipItem = {};
+				ipItem['className'] = 'cmdb_ci_ip_address';
+				ipItem['values'] = { 'ip_address' : hosts[key]['ipAddresses'][ipAdrKey]};
+				pl['items'].push(ipItem);
+				// add relationship with host
+				var relation = {};
+				relation['type'] = 'Owns::Owned by';
+				relation['parent'] = 0;
+				relation['child'] = itemIndex;
+				// add new item to payload and store its payload index
+				pl['relations'].push(relation);	
+				itemIndex++;
+			}
+			var alreadyAdded = {};
+			// create all process-group relationships (cmdb_ci_cluster)
+			if(hosts[key]['toRelationships'] && hosts[key]['toRelationships']['runsOn']) {
+				for(var pgKey in hosts[key]['toRelationships']['runsOn']) {
+					var pg = pgs[hosts[key]['toRelationships']['runsOn'][pgKey]];
+					if(pg) {
+						// create a process group CI (cmdb_ci_cluster)
+						var pItem = {};
+						pItem['className'] = 'cmdb_ci_cluster';
+						pItem['values'] = { 'name' : pg['displayName'] , 'correlation_id' : pg['entityId'] };
+						pItem['values']['running_process_command'] = '';
+						pItem['values']['running_process_parameters'] = '';
+						pItem['values']['tcp_port'] = '80';
+						pItem['values']['comments'] = extractTags(pg['tags']);
+						
+						
+						pl['items'].push(pItem);
+						// add relationship with host
+						var relation = {};
+						relation['type'] = 'Runs on::Runs';
+						relation['parent'] = itemIndex;
+						relation['child'] = 0; // host is always index 0
+						// add new item to payload and store its payload index
+						pl['relations'].push(relation);	
+						itemIndex++;
+					}
+				}
+			}
+			// send the result to the identification and reconciliation Engine
+			var input = new global.JSON().encode(pl);
+			//gs.debug("Payload x: " + global.JSON.stringify(pl));
+			var output = sn_cmdb.IdentificationEngine.createOrUpdateCI("DYNATRACE", input);	
+			// empty payload for next service
+			pl['items'] = [];
+			pl['relations'] = [];
+		}	
+	}
+	else {
+		gs.debug("Dynatrace app failed to pull hosts with HTTP status: " + status);
+	}
+	gs.debug("Hosts: " + Object.keys(hosts).length);
+}
+
+function urlClean(url) {
+	url = url.trim();
+	if(!url.startsWith("https://")) {
+		url = "https://" + url;
+	}
+	if(url.endsWith("/")) {
+		url = url.substring(0, url.length - 1);
+	}
+	if(!url.contains('.')) {
+		url = url + ".live.dynatrace.com";
+	}
+	return url;
+}
+
+// ServiceNow script for fetching autodetected and monitored entities directly from Dynatrace
+if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
+	// read all configured environments and sync the components
+	var environment = new GlideRecord('x_dynat_ruxit_environments');
+	environment.query();   
+	while (environment.next()) {   
+		var apiUrl = urlClean(environment['dynatrace_environment_api_url']);
+		gs.debug("Dynatrace CMDB sync for environment: " + apiUrl);
+		var apiToken = environment['api_token'].getDecryptedValue();
+		var tagString = "";
+		if(environment['filter_tags']) {
+			tagString = environment['filter_tags'];
+		}
+		var tagUrlParam = '';
+		if(!tagString.trim().equals('')) {
+			var tags = tagString.split(',');
+			for(var i=0; i<tags.length; i++) {
+				tagUrlParam += '&tag=' + encodeURI(tags[i].trim());
+			} 
+		}
+
+		gs.debug("Dynatrace CMDB sync filter tags: " + tagUrlParam);
+
+		// fetch processes
+		var pgs = getProcessGroups(tagUrlParam, apiUrl, apiToken);
+		// create or update all hosts and processes and their relationships
+		pushHostsAndProcesses(tagUrlParam, apiUrl, apiToken, pgs);
+		// create or update all services and apps and their relationships
+		pushServicesAndApps(tagUrlParam, apiUrl, apiToken, pgs);
+	}
+}
+]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>Admin</sys_created_by>
+        <sys_created_on>2017-11-10 13:39:35</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>6a609f52db52cf40190bd92b5e96191c</sys_id>
+        <sys_mod_count>272</sys_mod_count>
+        <sys_name>Dynatrace CMDB Sync</sys_name>
+        <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
+        <sys_update_name>sysauto_script_6a609f52db52cf40190bd92b5e96191c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-07-04 05:10:13</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

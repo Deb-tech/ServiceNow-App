@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices>error, warn, info, debug</choices>
+        <description>Logging verbosity</description>
+        <ignore_cache>false</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_dynat_ruxit.logging.verbosity</name>
+        <read_roles>admin,x_dynat_ruxit.Integration</read_roles>
+        <suffix>logging.verbosity</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>Admin</sys_created_by>
+        <sys_created_on>2017-10-05 11:33:09</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>ce9b95bedb2d4b00d5e7572e5e961997</sys_id>
+        <sys_mod_count>13</sys_mod_count>
+        <sys_name>x_dynat_ruxit.logging.verbosity</sys_name>
+        <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
+        <sys_update_name>sys_properties_ce9b95bedb2d4b00d5e7572e5e961997</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-08-10 11:27:59</sys_updated_on>
+        <type>choicelist</type>
+        <value>debug</value>
+        <write_roles>x_dynat_ruxit.Integration,admin</write_roles>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=ce9b95bedb2d4b00d5e7572e5e961997"/>
+</record_update>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>false</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Synchronize applications job</name>
+        <run_as display_value="System Administrator">6816f79cc0a8016401c5a33be04be441</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1970-01-01 00:10:00</run_period>
+        <run_start>2016-05-11 05:33:00</run_start>
+        <run_time>1970-01-01 08:00:00</run_time>
+        <run_type>periodically</run_type>
+        <script><![CDATA[// ServiceNow script for fetching autodetected and monitored applications directly from Dynatrace
+//
+if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
+	gs.info("Dynatrace: start synchronizing applications");
+	var yourRuxitEnvironment = gs.getProperty('x_dynat_ruxit.environment').trim();
+	var yourRuxitAPIKey = gs.getProperty('x_dynat_ruxit.api_key').trim();  
+
+	var restMessage = new sn_ws.RESTMessageV2();
+	var apiUrl;
+	if(gs.getProperty('x_dynat_ruxit.managed') == 'true') {
+		apiUrl = gs.getProperty('x_dynat_ruxit.apiurl') + "/api/v1/entity/applications/";
+		gs.info("Dynatrace Managed config: " + apiUrl);
+	}
+	else {
+		apiUrl = "https://" + yourRuxitEnvironment + ".live.dynatrace.com/api/v1/entity/applications/";
+		gs.info("Dynatrace SaaS config: " + apiUrl);
+	}
+	restMessage.setHttpMethod('get');
+	restMessage.setRequestHeader('Authorization', 'Api-Token ' + yourRuxitAPIKey);
+	restMessage.setEndpoint(apiUrl);
+	var response = restMessage.execute();
+	status = response.getStatusCode();
+	gs.info("Dynatrace: finished app rest call: " + status);
+	if(status == 200) {
+		var index = new GlideRecord("x_dynat_ruxit_entity_index"); 
+		index.initialize();
+		
+		var p = new global.JSON().decode(response.getBody());
+		// first mark all as non-operational
+		var srv1 = new GlideRecord("cmdb_ci_service"); 
+		srv1.addQuery('discovery_source', 'DYNATRACE');
+		srv1.query();
+		srv1.setValue('operational_status', 2);
+		srv1.updateMultiple();
+		
+		// now insert or update new infos
+		var srv = new GlideRecord("cmdb_ci_service"); 
+		srv.initialize();
+		
+		for (var i = 0; i < p.length; i++) {  
+			srv.get('correlation_id',  p[i].entityId );
+			srv.setValue('correlation_id',  p[i].entityId );  
+			srv.setValue('correlation_display', 'DYNATRACE' );
+			srv.setValue('discovery_source', 'DYNATRACE');
+			srv.setValue('operational_status', 1);
+			srv.setValue('name', p[i].displayName + ' (' + p[i].entityId + ')');  
+			if(p[i].discoveredName) {
+				srv.setValue('short_description', p[i].discoveredName);  
+			}
+			srv.update();
+			// and store mapping in index table
+			if(srv.getValue('sys_id') && srv.getValue('sys_id').toString() !== '') {
+				index.get('meid', p[i].entityId);
+				index.setValue('meid', p[i].entityId);
+				index.setValue('configuration_item', srv.getValue('sys_id'));
+				index.update();
+			}
+		}
+
+		// Start to create the application relationships
+		var parent;
+		var child;
+	
+		for (var i = 0; i < p.length; i++) { 
+			if(index.get('meid', p[i].entityId)) {
+				parent = index.getValue('configuration_item');
+				if(p[i].fromRelationships.calls) {
+					for (var j = 0; j < p[i].fromRelationships.calls.length; j++) {
+						if(index.get('meid', p[i].fromRelationships.calls[j])) {
+							child = index.getValue('configuration_item');
+						}
+						var rel = new GlideRecord("cmdb_rel_ci"); 
+						rel.addQuery('parent', parent);
+						rel.addQuery('child', child);
+						rel.addQuery('type.sys_name', "Uses::Used by");
+						rel.query();
+						if(!rel.next()) { // do not add duplicate relations
+							if(parent && child) {
+								rel.initialize();
+								rel.parent = parent;
+								rel.child = child;
+								rel.type.setDisplayValue("Uses::Used by");
+								rel.insert();
+							}
+						} 
+					}
+				}
+			}
+		}
+	}
+	gs.info("Dynatrace: finished application list sync");
+}]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2016-05-11 05:35:10</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>ee8b53fd4f535200dbec7bb28110c706</sys_id>
+        <sys_mod_count>95</sys_mod_count>
+        <sys_name>Synchronize applications job</sys_name>
+        <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
+        <sys_update_name>sysauto_script_ee8b53fd4f535200dbec7bb28110c706</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2017-12-22 07:39:29</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

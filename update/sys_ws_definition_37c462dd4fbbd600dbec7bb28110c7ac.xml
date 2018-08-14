@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_definition">
+    <sys_ws_definition action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <base_uri>/api/x_dynat_ruxit/problem_notification</base_uri>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_version>No active default version</default_version>
+        <doc_link/>
+        <enforce_acl>9d97825b4fb75a00dbec7bb28110c7bd</enforce_acl>
+        <is_versioned>false</is_versioned>
+        <name>Problem Notification</name>
+        <namespace>x_dynat_ruxit</namespace>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <service_id>problem_notification</service_id>
+        <short_description/>
+        <sys_class_name>sys_ws_definition</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2016-06-03 08:49:24</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>37c462dd4fbbd600dbec7bb28110c7ac</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Problem Notification</sys_name>
+        <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
+        <sys_policy>protected</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
+        <sys_update_name>sys_ws_definition_37c462dd4fbbd600dbec7bb28110c7ac</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2016-06-09 11:50:16</sys_updated_on>
+    </sys_ws_definition>
+</record_update>
