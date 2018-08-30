@@ -76,7 +76,7 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 	for (var key in items) {
 		var index = 1;
 		var item = {};
-		item['className'] = 'cmdb_ci_service_manual';
+		item['className'] = 'x_dynat_ruxit_software_service';
 		var values = {};
 		values['name'] = items[key]['displayName'];
 		values['correlation_id'] = items[key]['entityId'];
@@ -94,7 +94,7 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 				if(items[relKey]) {
 					// add related item to the item list
 					var relItem = {};
-					relItem['className'] = 'cmdb_ci_service_manual';
+					relItem['className'] = 'x_dynat_ruxit_software_service';
 					var relValues = {};
 					relValues['name'] = items[relKey]['displayName'];
 					relValues['correlation_id'] = items[relKey]['entityId'];
@@ -119,7 +119,7 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 				if(pgs[relRunsKey]) {
 					// add related item to the item list
 					var relRunsItem = {};
-					relRunsItem['className'] = 'cmdb_ci_cluster';
+					relRunsItem['className'] = 'x_dynat_ruxit_process_group';
 					var relRunsValues = {};
 					relRunsValues['name'] = pgs[relRunsKey]['displayName'];
 					relRunsValues['correlation_id'] = relRunsKey;
@@ -198,7 +198,7 @@ function getProcessGroups(tagFilter, apiUrl, token, mid) {
 }
 
 // fetches all hosts, processes and process groups from Dynatrace API and 
-// creates or updates SNOW server, web servers and clusters
+// creates or updates SNOW server, web servers and services
 // Hosts and their relationships are tagged filtered.
 function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 	var hostTypes = {'LINUX' : 'cmdb_ci_linux_server', 'WINDOWS' : 'cmdb_ci_win_server', 'AIX' : 'cmdb_ci_aix_server'};
@@ -261,15 +261,11 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 				for(var pgKey in hosts[key]['toRelationships']['runsOn']) {
 					var pg = pgs[hosts[key]['toRelationships']['runsOn'][pgKey]];
 					if(pg) {
-						// create a process group CI (cmdb_ci_cluster)
+						// create a process group CI (x_dynat_ruxit_process_group)
 						var pItem = {};
-						pItem['className'] = 'cmdb_ci_cluster';
+						pItem['className'] = 'x_dynat_ruxit_process_group';
 						pItem['values'] = { 'name' : pg['displayName'] , 'correlation_id' : pg['entityId'] };
-						pItem['values']['running_process_command'] = '';
-						pItem['values']['running_process_parameters'] = '';
-						pItem['values']['tcp_port'] = '80';
 						pItem['values']['comments'] = extractTags(pg['tags']);
-						
 						
 						pl['items'].push(pItem);
 						// add relationship with host
@@ -354,7 +350,7 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_created_on>2017-11-10 13:39:35</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>6a609f52db52cf40190bd92b5e96191c</sys_id>
-        <sys_mod_count>276</sys_mod_count>
+        <sys_mod_count>279</sys_mod_count>
         <sys_name>Dynatrace CMDB Sync</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
@@ -362,7 +358,7 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sysauto_script_6a609f52db52cf40190bd92b5e96191c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2018-08-30 08:38:22</sys_updated_on>
+        <sys_updated_on>2018-08-30 14:16:33</sys_updated_on>
         <upgrade_safe>false</upgrade_safe>
     </sysauto_script>
 </record_update>

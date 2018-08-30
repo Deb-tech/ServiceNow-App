@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element extends="cmdb_ci" label="Software service" max_length="40" name="x_dynat_ruxit_software_service" type="collection"/>
+</database>
