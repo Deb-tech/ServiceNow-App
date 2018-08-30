@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update>
+<?xml version="1.0" encoding="UTF-8"?><record_update>
     <sys_documentation element="filter_tags" label="Filter tags (comma separated)" language="en" table="x_dynat_ruxit_environments">
         <sys_documentation action="INSERT_OR_UPDATE">
             <element>filter_tags</element>

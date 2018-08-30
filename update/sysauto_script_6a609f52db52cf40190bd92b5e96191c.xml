@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="sysauto_script">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sysauto_script">
     <sysauto_script action="INSERT_OR_UPDATE">
         <active>true</active>
         <condition/>
@@ -34,13 +33,15 @@
 // fetches all services and applications from Dynatrace API and 
 // creates or updates SNOW business services
 // Services and apps are tagged filtered.
-function pushServicesAndApps(tagFilter, apiUrl, token, pgs) {
+function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 	var pl = {};
 	pl['items'] = [];
 	pl['relations'] = [];
 	var items = {};
 	var restMessage = new sn_ws.RESTMessageV2();
-	// restMessage.setMIDServer('mid_dynatrace');
+	if(mid) {
+		restMessage.setMIDServer(mid);
+	}
 	var servicesUrl = apiUrl + "/api/v1/entity/services/?" + tagFilter;
 	restMessage.setHttpMethod('get');
 	restMessage.setRequestHeader('Authorization', 'Api-Token ' + token);
@@ -145,11 +146,13 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs) {
 }
 
 // pull processes list
-function getProcesses(apiUrl, token) {
+function getProcesses(apiUrl, token, mid) {
 	var procRes = {};
 	var processesUrl = apiUrl + "/api/v1/entity/infrastructure/processes/?";
 	var restMessage = new sn_ws.RESTMessageV2();
-	// restMessage.setMIDServer('mid_dynatrace');
+	if(mid) {
+		restMessage.setMIDServer(mid);
+	}
 	restMessage.setHttpMethod('get');
 	restMessage.setRequestHeader('Authorization', 'Api-Token ' + token);
 	restMessage.setEndpoint(processesUrl);
@@ -169,11 +172,13 @@ function getProcesses(apiUrl, token) {
 }
 
 // pull process groups list
-function getProcessGroups(tagFilter, apiUrl, token) {
+function getProcessGroups(tagFilter, apiUrl, token, mid) {
 	var res = {};
 	var processGroupUrl = apiUrl + "/api/v1/entity/infrastructure/process-groups/?" + tagFilter;
 	var restMessage = new sn_ws.RESTMessageV2();
-	// restMessage.setMIDServer('mid_dynatrace');
+	if(mid) {
+		restMessage.setMIDServer(mid);
+	}
 	restMessage.setHttpMethod('get');
 	restMessage.setRequestHeader('Authorization', 'Api-Token ' + token);
 	restMessage.setEndpoint(processGroupUrl);
@@ -195,7 +200,7 @@ function getProcessGroups(tagFilter, apiUrl, token) {
 // fetches all hosts, processes and process groups from Dynatrace API and 
 // creates or updates SNOW server, web servers and clusters
 // Hosts and their relationships are tagged filtered.
-function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs) {
+function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 	var hostTypes = {'LINUX' : 'cmdb_ci_linux_server', 'WINDOWS' : 'cmdb_ci_win_server', 'AIX' : 'cmdb_ci_aix_server'};
 	var pl = {};
 	pl['items'] = [];
@@ -203,7 +208,9 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs) {
 	var hosts = {};
 	var processes = {};
 	var restMessage = new sn_ws.RESTMessageV2();
-	// restMessage.setMIDServer('mid_dynatrace');
+	if(mid) {
+		restMessage.setMIDServer(mid);
+	}
 	var hostsUrl = apiUrl + "/api/v1/entity/infrastructure/hosts?" + tagFilter;
 	restMessage.setHttpMethod('get');
 	restMessage.setRequestHeader('Authorization', 'Api-Token ' + token);
@@ -314,6 +321,11 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
 		var apiUrl = urlClean(environment['dynatrace_environment_api_url']);
 		gs.debug("Dynatrace CMDB sync for environment: " + apiUrl);
 		var apiToken = environment['api_token'].getDecryptedValue();
+		var mid = null;
+		if(environment['mid']) {
+			mid = environment['mid'].name;
+			gs.debug("Dynatrace uses a user defined MID server: " + mid);
+		}
 		var tagString = "";
 		if(environment['filter_tags']) {
 			tagString = environment['filter_tags'];
@@ -329,11 +341,11 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
 		gs.debug("Dynatrace CMDB sync filter tags: " + tagUrlParam);
 
 		// fetch processes
-		var pgs = getProcessGroups(tagUrlParam, apiUrl, apiToken);
+		var pgs = getProcessGroups(tagUrlParam, apiUrl, apiToken, mid);
 		// create or update all hosts and processes and their relationships
-		pushHostsAndProcesses(tagUrlParam, apiUrl, apiToken, pgs);
+		pushHostsAndProcesses(tagUrlParam, apiUrl, apiToken, pgs, mid);
 		// create or update all services and apps and their relationships
-		pushServicesAndApps(tagUrlParam, apiUrl, apiToken, pgs);
+		pushServicesAndApps(tagUrlParam, apiUrl, apiToken, pgs, mid);
 	}
 }
 ]]></script>
@@ -342,7 +354,7 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_created_on>2017-11-10 13:39:35</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>6a609f52db52cf40190bd92b5e96191c</sys_id>
-        <sys_mod_count>272</sys_mod_count>
+        <sys_mod_count>276</sys_mod_count>
         <sys_name>Dynatrace CMDB Sync</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
@@ -350,7 +362,7 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sysauto_script_6a609f52db52cf40190bd92b5e96191c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2018-07-04 05:10:13</sys_updated_on>
+        <sys_updated_on>2018-08-30 08:38:22</sys_updated_on>
         <upgrade_safe>false</upgrade_safe>
     </sysauto_script>
 </record_update>

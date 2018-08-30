@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update>
+<?xml version="1.0" encoding="UTF-8"?><record_update>
     <sys_ui_section caption="" section_id="edbc68a8db724f00d5e7572e5e96194c" sys_domain="global" table="x_dynat_ruxit_environments" version="3" view="">
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>environment_name</element>

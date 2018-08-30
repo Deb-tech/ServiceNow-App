@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="sys_user_role_contains">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role_contains">
     <sys_user_role_contains action="INSERT_OR_UPDATE">
         <contains display_value="import_set_loader" name="import_set_loader">4a68d0fe0a0a0bc001b666e53798a5c7</contains>
         <role display_value="x_dynat_ruxit.Integration" name="x_dynat_ruxit.Integration">4c0702574fb75a00dbec7bb28110c7b2</role>
