@@ -25,6 +25,7 @@
 		}
 		sb.push(t);
 	}
+	sb[sb.length-1] = sb[sb.length-1] + ','; 
 	return sb.join();
 	//gs.error(sb.join());
 	//gs.error(JSON.stringify(tj));
@@ -66,6 +67,7 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 	if(status == 200) {
 		var a = new global.JSON().decode(response.getBody());		
 		for (var j = 0; j < a.length; j++) { 
+			a[j]['serviceTechnologyTypes'] = ['Application'];
 			items[a[j]['entityId']] = a[j];
 		}	
 	}
@@ -82,6 +84,15 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 		values['correlation_id'] = items[key]['entityId'];
 		values['operational_status'] = 1;
 		values['comments'] = extractTags(items[key]['tags']);
+		var first = new Date(items[key]['firstSeenTimestamp']);
+		var last = new Date(items[key]['lastSeenTimestamp']);
+		values['short_description'] = ''; 
+		values['first_discovered'] = first.toISOString().replace('T', ' ');
+		values['last_discovered'] = last.toISOString().replace('T', ' ');
+		if(items[key]['serviceTechnologyTypes']) {
+			values['service_technology_types'] = items[key]['serviceTechnologyTypes'].join();
+		}
+		
 		item['values'] = values;
 		
 		// add new item to payload and store its payload index
@@ -233,8 +244,16 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 			values['os_version'] = hosts[key]['osVersion'];
 			values['cpu_type'] = hosts[key]['osArchitecture'];
 			values['cpu_count'] = hosts[key]['cpuCores'];
-			values['ip_address'] = hosts[key]['ipAddresses'][0]; // enter first IP directly
+			if(hosts[key]['ipAddresses'].length > 1) {
+				values['ip_address'] = hosts[key]['ipAddresses'][0]; // enter first IP directly
+			} 
 			values['comments'] = extractTags(hosts[key]['tags']);
+			var first = new Date(hosts[key]['firstSeenTimestamp']);
+			var last = new Date(hosts[key]['lastSeenTimestamp']);
+			values['short_description'] = '';
+			values['first_discovered'] = first.toISOString().replace('T', ' ');
+			values['last_discovered'] = last.toISOString().replace('T', ' ');
+			
 			item['values'] = values;
 			
 			// add new item to payload and store its payload index
@@ -256,7 +275,7 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 				itemIndex++;
 			}
 			var alreadyAdded = {};
-			// create all process-group relationships (cmdb_ci_cluster)
+			// create all process-group relationships 
 			if(hosts[key]['toRelationships'] && hosts[key]['toRelationships']['runsOn']) {
 				for(var pgKey in hosts[key]['toRelationships']['runsOn']) {
 					var pg = pgs[hosts[key]['toRelationships']['runsOn'][pgKey]];
@@ -266,7 +285,18 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 						pItem['className'] = 'x_dynat_ruxit_process_group';
 						pItem['values'] = { 'name' : pg['displayName'] , 'correlation_id' : pg['entityId'] };
 						pItem['values']['comments'] = extractTags(pg['tags']);
-						
+						var first = new Date(pg['firstSeenTimestamp']);
+						var last = new Date(pg['lastSeenTimestamp']);
+						pItem['values']['short_description'] = '';
+						pItem['values']['first_discovered'] = first.toISOString().replace('T', ' ');
+						pItem['values']['last_discovered'] = last.toISOString().replace('T', ' ');
+						if(pg['softwareTechnologies']) {
+							var sb = [];
+							for(i = 0; i < pg['softwareTechnologies'].length; i++) {
+								sb.push(pg['softwareTechnologies'][i]['type']);
+							}
+							pItem['values']['software_technologies'] = sb.join();
+						}
 						pl['items'].push(pItem);
 						// add relationship with host
 						var relation = {};
@@ -350,7 +380,7 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_created_on>2017-11-10 13:39:35</sys_created_on>
         <sys_customer_update>false</sys_customer_update>
         <sys_id>6a609f52db52cf40190bd92b5e96191c</sys_id>
-        <sys_mod_count>279</sys_mod_count>
+        <sys_mod_count>327</sys_mod_count>
         <sys_name>Dynatrace CMDB Sync</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
@@ -358,7 +388,7 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sysauto_script_6a609f52db52cf40190bd92b5e96191c</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2018-08-30 14:16:33</sys_updated_on>
+        <sys_updated_on>2018-09-12 16:18:30</sys_updated_on>
         <upgrade_safe>false</upgrade_safe>
     </sysauto_script>
 </record_update>

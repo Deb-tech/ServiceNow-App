@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="software_technologies" label="Software technologies" language="en" table="x_dynat_ruxit_process_group">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>software_technologies</element>
+            <help/>
+            <hint/>
+            <label>Software technologies</label>
+            <language>en</language>
+            <name>x_dynat_ruxit_process_group</name>
+            <plural>Software technologies</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2018-09-12 15:57:01</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>8618affcdbe8ab40d5e7572e5e96194b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Software technologies</sys_name>
+            <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
+            <sys_update_name>sys_documentation_x_dynat_ruxit_process_group_software_technologies_en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2018-09-12 15:57:01</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

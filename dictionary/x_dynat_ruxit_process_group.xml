@@ -1,3 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
-    <element extends="cmdb_ci" label="Process group" max_length="40" name="x_dynat_ruxit_process_group" type="collection"/>
+    <element extends="cmdb_ci" label="Process group" max_length="40" name="x_dynat_ruxit_process_group" sizeclass="10" type="collection">
+        <element label="Software technologies" max_length="4000" name="software_technologies" type="glide_list"/>
+    </element>
 </database>
