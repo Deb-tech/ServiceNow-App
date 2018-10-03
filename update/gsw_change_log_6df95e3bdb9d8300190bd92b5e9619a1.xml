@@ -8,13 +8,11 @@
         <sys_class_name>gsw_change_log</sys_class_name>
         <sys_created_by>Admin</sys_created_by>
         <sys_created_on>2017-09-26 08:22:13</sys_created_on>
-        <sys_customer_update>false</sys_customer_update>
         <sys_id>6df95e3bdb9d8300190bd92b5e9619a1</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>2017-09-26 08:22:13</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
-        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>gsw_change_log_6df95e3bdb9d8300190bd92b5e9619a1</sys_update_name>
         <sys_updated_by>Admin</sys_updated_by>

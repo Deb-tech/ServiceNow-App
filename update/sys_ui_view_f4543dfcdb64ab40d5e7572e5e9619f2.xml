@@ -7,13 +7,11 @@
         <sys_class_name>sys_ui_view</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2018-09-12 07:31:12</sys_created_on>
-        <sys_customer_update>false</sys_customer_update>
         <sys_id>f4543dfcdb64ab40d5e7572e5e9619f2</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>Pa_new_tab_12</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
-        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ui_view_f4543dfcdb64ab40d5e7572e5e9619f2</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>

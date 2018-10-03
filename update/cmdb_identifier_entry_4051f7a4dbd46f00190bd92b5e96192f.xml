@@ -11,13 +11,11 @@
         <sys_class_name>cmdb_identifier_entry</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2018-08-30 11:43:16</sys_created_on>
-        <sys_customer_update>false</sys_customer_update>
         <sys_id>4051f7a4dbd46f00190bd92b5e96192f</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name/>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
-        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>cmdb_identifier_entry_4051f7a4dbd46f00190bd92b5e96192f</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>

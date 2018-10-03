@@ -90,7 +90,7 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 		var values = {};
 		values['name'] = items[key]['displayName'];
 		values['correlation_id'] = items[key]['entityId'];
-		values['operational_status'] = 1;
+		values['operational_status'] = "1";
 		values['comments'] = extractTags(items[key]['tags']);
 		var first = new Date(items[key]['firstSeenTimestamp']);
 		var last = new Date(items[key]['lastSeenTimestamp']);
@@ -238,6 +238,7 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 	status = response.getStatusCode();
 	if(status == 200) {
 		var p = new global.JSON().decode(response.getBody());	
+		gs.debug("Dynatrace hosts : " + p.length);
 		for (var i = 0; i < p.length; i++) { 
 			var itemIndex = 1;
 			var key = p[i]['entityId'];
@@ -252,6 +253,7 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 			values['os_version'] = hosts[key]['osVersion'];
 			values['cpu_type'] = hosts[key]['osArchitecture'];
 			values['cpu_count'] = hosts[key]['cpuCores'];
+			values['operational_status'] = "1";
 			if(hosts[key]['ipAddresses'].length > 1) {
 				values['ip_address'] = hosts[key]['ipAddresses'][0]; // enter first IP directly
 			} 
@@ -261,7 +263,6 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 			values['short_description'] = '';
 			values['first_discovered'] = first.toISOString().replace('T', ' ');
 			values['last_discovered'] = last.toISOString().replace('T', ' ');
-			
 			item['values'] = values;
 			
 			// add new item to payload and store its payload index
@@ -271,7 +272,7 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 				// create an ip address CI (cmdb_ci_ip_address)
 				var ipItem = {};
 				ipItem['className'] = 'cmdb_ci_ip_address';
-				ipItem['values'] = { 'ip_address' : hosts[key]['ipAddresses'][ipAdrKey]};
+				ipItem['values'] = { 'ip_address' : hosts[key]['ipAddresses'][ipAdrKey], 'operational_status' : '1' };
 				pl['items'].push(ipItem);
 				// add relationship with host
 				var relation = {};
@@ -291,7 +292,7 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 						// create a process group CI (x_dynat_ruxit_process_group)
 						var pItem = {};
 						pItem['className'] = 'x_dynat_ruxit_process_group';
-						pItem['values'] = { 'name' : pg['displayName'] , 'correlation_id' : pg['entityId'] };
+						pItem['values'] = { 'name' : pg['displayName'] , 'correlation_id' : pg['entityId'], 'operational_status' : '1' };
 						pItem['values']['comments'] = extractTags(pg['tags']);
 						var first = new Date(pg['firstSeenTimestamp']);
 						var last = new Date(pg['lastSeenTimestamp']);
@@ -300,8 +301,8 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 						pItem['values']['last_discovered'] = last.toISOString().replace('T', ' ');
 						if(pg['softwareTechnologies']) {
 							var sb = [];
-							for(i = 0; i < pg['softwareTechnologies'].length; i++) {
-								sb.push(pg['softwareTechnologies'][i]['type']);
+							for(var j = 0; j < pg['softwareTechnologies'].length; j++) {
+								sb.push(pg['softwareTechnologies'][j]['type']);
 							}
 							pItem['values']['software_technologies'] = sb.join();
 						}
@@ -319,7 +320,7 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 			}
 			// send the result to the identification and reconciliation Engine
 			var input = new global.JSON().encode(pl);
-			//gs.debug("Payload x: " + global.JSON.stringify(pl));
+			//gs.debug("Dynatrace host payload: " + global.JSON.stringify(pl));
 			var output = sn_cmdb.IdentificationEngine.createOrUpdateCI("DYNATRACE", input);	
 			//gs.debug("Identificationengine output: " + output);
 			// empty payload for next service
@@ -354,6 +355,12 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
 	environment.query();   
 	while (environment.next()) {   
 		var apiUrl = urlClean(environment['dynatrace_environment_api_url']);
+		var isActive = "" + environment['active']
+		if (isActive == "false") {
+			gs.debug("Skipping Dynatrace CMDB sync for environment (not active): " + apiUrl);
+			continue;
+		}
+
 		gs.debug("Dynatrace CMDB sync for environment: " + apiUrl);
 		var apiToken = environment['api_token'].getDecryptedValue();
 		var mid = null;
@@ -380,6 +387,7 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
 		// create or update all hosts and processes and their relationships
 		pushHostsAndProcesses(tagUrlParam, apiUrl, apiToken, pgs, mid);
 		// create or update all services and apps and their relationships
+		
 		pushServicesAndApps(tagUrlParam, apiUrl, apiToken, pgs, mid);
 	}
 }
@@ -387,17 +395,15 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_class_name>sysauto_script</sys_class_name>
         <sys_created_by>Admin</sys_created_by>
         <sys_created_on>2017-11-10 13:39:35</sys_created_on>
-        <sys_customer_update>false</sys_customer_update>
         <sys_id>6a609f52db52cf40190bd92b5e96191c</sys_id>
-        <sys_mod_count>333</sys_mod_count>
+        <sys_mod_count>340</sys_mod_count>
         <sys_name>Dynatrace CMDB Sync</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
-        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sysauto_script_6a609f52db52cf40190bd92b5e96191c</sys_update_name>
-        <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2018-09-13 12:15:55</sys_updated_on>
+        <sys_updated_by>wolfgang</sys_updated_by>
+        <sys_updated_on>2018-09-25 11:14:34</sys_updated_on>
         <upgrade_safe>false</upgrade_safe>
     </sysauto_script>
 </record_update>

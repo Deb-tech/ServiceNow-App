@@ -1,114 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update>
     <sys_ui_section caption="" section_id="5ed1b3e4dbd46f00190bd92b5e96190b" sys_domain="global" table="x_dynat_ruxit_software_service" version="3" view="">
         <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>name</element>
+            <element>tags</element>
             <position>0</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2018-09-12 15:40:42</sys_created_on>
-            <sys_id>8f542bf8dbe8ab40d5e7572e5e9619b2</sys_id>
+            <sys_created_by>reinhard</sys_created_by>
+            <sys_created_on>2018-09-19 07:49:13</sys_created_on>
+            <sys_id>249bf90fdbac2700d5e7572e5e9619a1</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_software_service" sys_domain="global" view="Default view">5ed1b3e4dbd46f00190bd92b5e96190b</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2018-09-12 15:40:42</sys_updated_on>
+            <sys_updated_by>reinhard</sys_updated_by>
+            <sys_updated_on>2018-09-19 07:49:13</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>name</element>
+            <position>1</position>
+            <sys_created_by>reinhard</sys_created_by>
+            <sys_created_on>2018-09-19 07:49:13</sys_created_on>
+            <sys_id>a49bf90fdbac2700d5e7572e5e9619a1</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_software_service" sys_domain="global" view="Default view">5ed1b3e4dbd46f00190bd92b5e96190b</sys_ui_section>
+            <sys_updated_by>reinhard</sys_updated_by>
+            <sys_updated_on>2018-09-19 07:49:13</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>correlation_id</element>
-            <position>1</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2018-09-12 15:40:42</sys_created_on>
-            <sys_id>03542bf8dbe8ab40d5e7572e5e9619b3</sys_id>
+            <position>2</position>
+            <sys_created_by>reinhard</sys_created_by>
+            <sys_created_on>2018-09-19 07:49:13</sys_created_on>
+            <sys_id>289bf90fdbac2700d5e7572e5e9619a1</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_software_service" sys_domain="global" view="Default view">5ed1b3e4dbd46f00190bd92b5e96190b</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2018-09-12 15:40:42</sys_updated_on>
+            <sys_updated_by>reinhard</sys_updated_by>
+            <sys_updated_on>2018-09-19 07:49:13</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>short_description</element>
-            <position>2</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2018-09-12 15:40:42</sys_created_on>
-            <sys_id>83542bf8dbe8ab40d5e7572e5e9619b3</sys_id>
+            <position>3</position>
+            <sys_created_by>reinhard</sys_created_by>
+            <sys_created_on>2018-09-19 07:49:13</sys_created_on>
+            <sys_id>a89bf90fdbac2700d5e7572e5e9619a1</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_software_service" sys_domain="global" view="Default view">5ed1b3e4dbd46f00190bd92b5e96190b</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2018-09-12 15:40:42</sys_updated_on>
+            <sys_updated_by>reinhard</sys_updated_by>
+            <sys_updated_on>2018-09-19 07:49:13</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>comments</element>
-            <position>3</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2018-09-12 15:40:42</sys_created_on>
-            <sys_id>07542bf8dbe8ab40d5e7572e5e9619b3</sys_id>
+            <position>4</position>
+            <sys_created_by>reinhard</sys_created_by>
+            <sys_created_on>2018-09-19 07:49:13</sys_created_on>
+            <sys_id>2c9bf90fdbac2700d5e7572e5e9619a1</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_software_service" sys_domain="global" view="Default view">5ed1b3e4dbd46f00190bd92b5e96190b</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2018-09-12 15:40:42</sys_updated_on>
+            <sys_updated_by>reinhard</sys_updated_by>
+            <sys_updated_on>2018-09-19 07:49:13</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>last_discovered</element>
-            <position>4</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2018-09-12 15:40:42</sys_created_on>
-            <sys_id>87542bf8dbe8ab40d5e7572e5e9619b3</sys_id>
+            <position>5</position>
+            <sys_created_by>reinhard</sys_created_by>
+            <sys_created_on>2018-09-19 07:49:13</sys_created_on>
+            <sys_id>ac9bf90fdbac2700d5e7572e5e9619a1</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_software_service" sys_domain="global" view="Default view">5ed1b3e4dbd46f00190bd92b5e96190b</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2018-09-12 15:40:42</sys_updated_on>
+            <sys_updated_by>reinhard</sys_updated_by>
+            <sys_updated_on>2018-09-19 07:49:13</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>first_discovered</element>
-            <position>5</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2018-09-12 15:40:42</sys_created_on>
-            <sys_id>0b542bf8dbe8ab40d5e7572e5e9619b3</sys_id>
+            <position>6</position>
+            <sys_created_by>reinhard</sys_created_by>
+            <sys_created_on>2018-09-19 07:49:13</sys_created_on>
+            <sys_id>209bf90fdbac2700d5e7572e5e9619a2</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_software_service" sys_domain="global" view="Default view">5ed1b3e4dbd46f00190bd92b5e96190b</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2018-09-12 15:40:42</sys_updated_on>
+            <sys_updated_by>reinhard</sys_updated_by>
+            <sys_updated_on>2018-09-19 07:49:13</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>ui_ng_relation_formatter.xml</element>
-            <position>6</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2018-09-12 15:40:42</sys_created_on>
-            <sys_id>8b542bf8dbe8ab40d5e7572e5e9619b3</sys_id>
+            <position>7</position>
+            <sys_created_by>reinhard</sys_created_by>
+            <sys_created_on>2018-09-19 07:49:13</sys_created_on>
+            <sys_id>ec9b3d0fdbac2700d5e7572e5e9619f1</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter display_value="CI Relations">b62309137f32310009fedf92bdfa912b</sys_ui_formatter>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_software_service" sys_domain="global" view="Default view">5ed1b3e4dbd46f00190bd92b5e96190b</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2018-09-12 15:40:42</sys_updated_on>
+            <sys_updated_by>reinhard</sys_updated_by>
+            <sys_updated_on>2018-09-19 07:49:13</sys_updated_on>
             <sys_user/>
             <type>formatter</type>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>service_technology_types</element>
-            <position>7</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2018-09-12 15:56:05</sys_created_on>
-            <sys_id>5ce7abfcdbe8ab40d5e7572e5e9619e0</sys_id>
+            <position>8</position>
+            <sys_created_by>reinhard</sys_created_by>
+            <sys_created_on>2018-09-19 07:49:13</sys_created_on>
+            <sys_id>a09b3d0fdbac2700d5e7572e5e9619f2</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_software_service" sys_domain="global" view="Default view">5ed1b3e4dbd46f00190bd92b5e96190b</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2018-09-12 15:56:05</sys_updated_on>
+            <sys_updated_by>reinhard</sys_updated_by>
+            <sys_updated_on>2018-09-19 07:49:13</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -120,7 +134,6 @@
             <sys_class_name>sys_ui_section</sys_class_name>
             <sys_created_by>admin</sys_created_by>
             <sys_created_on>2018-08-30 11:45:28</sys_created_on>
-            <sys_customer_update>false</sys_customer_update>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
             <sys_id>5ed1b3e4dbd46f00190bd92b5e96190b</sys_id>
@@ -129,7 +142,6 @@
             <sys_overrides/>
             <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
             <sys_policy/>
-            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
             <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
             <sys_update_name>sys_ui_section_5ed1b3e4dbd46f00190bd92b5e96190b</sys_update_name>
             <sys_updated_by>admin</sys_updated_by>

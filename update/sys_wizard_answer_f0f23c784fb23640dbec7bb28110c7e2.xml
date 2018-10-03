@@ -9,19 +9,17 @@
         <next_question/>
         <order>100</order>
         <payload_name/>
-        <question display_value="Base Configuration Item" name="Base Configuration Item">bfa5af654f1f1200dbec7bb28110c7a2</question>
+        <question display_value="Base Configuration Item" name="Base Configuration Item">cf64a419db202300d5e7572e5e96194d</question>
         <roles/>
         <script/>
         <sys_class_name>sys_wizard_answer</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2017-05-15 10:33:24</sys_created_on>
-        <sys_customer_update>false</sys_customer_update>
         <sys_id>f0f23c784fb23640dbec7bb28110c7e2</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>Process groups</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
-        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_wizard_answer_f0f23c784fb23640dbec7bb28110c7e2</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>

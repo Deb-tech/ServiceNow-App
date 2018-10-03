@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element label="CI Mapping" max_length="40" name="x_dynat_ruxit_ci_mapping" type="collection">
-        <element label="Assignment Group" max_length="255" name="assignment_group" reference="sys_user_group" type="reference"/>
-        <element label="Caller" max_length="255" name="caller" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Assignment Group" max_length="255" name="assignment_group" reference="sys_user_group" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Caller" max_length="255" name="caller" reference="sys_user" type="reference"/>
         <element label="Category" max_length="40" name="category" type="string"/>
-        <element label="Company" max_length="255" name="company" reference="core_company" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Company" max_length="255" name="company" reference="core_company" type="reference"/>
         <element label="Dynatrace ID" mandatory="true" max_length="100" name="dynatrace_meid" type="string"/>
-        <element label="Impact" max_length="40" name="impact" type="integer"/>
-        <element display="true" label="Configuration Item" mandatory="true" max_length="32" name="sn_configuration_item" reference="cmdb_ci" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Impact" max_length="40" name="impact" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" display="true" label="Configuration Item" mandatory="true" max_length="32" name="sn_configuration_item" reference="cmdb_ci" type="reference"/>
         <element label="Subcategory" max_length="40" name="subcategory" type="string"/>
-        <element label="Urgency" max_length="40" name="urgency" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Urgency" max_length="40" name="urgency" type="integer"/>
         <index name="index">
+            <element name="caller"/>
+        </index>
+        <index name="index2">
+            <element name="assignment_group"/>
+        </index>
+        <index name="index3">
             <element name="sn_configuration_item"/>
+        </index>
+        <index name="index4">
+            <element name="company"/>
         </index>
     </element>
 </database>

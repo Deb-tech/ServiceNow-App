@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_embedded_help_role">
+    <sys_embedded_help_role action="INSERT_OR_UPDATE">
+        <order>1000</order>
+        <role display_value="u_test_transform1_user" name="u_test_transform1_user">c3138074dbb06b00d5e7572e5e961986</role>
+        <sys_class_name>sys_embedded_help_role</sys_class_name>
+        <sys_created_by>wolfgang</sys_created_by>
+        <sys_created_on>2018-09-24 09:32:16</sys_created_on>
+        <sys_id>cf138074dbb06b00d5e7572e5e961988</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>c3138074dbb06b00d5e7572e5e961986</sys_name>
+        <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
+        <sys_update_name>sys_embedded_help_role_cf138074dbb06b00d5e7572e5e961988</sys_update_name>
+        <sys_updated_by>wolfgang</sys_updated_by>
+        <sys_updated_on>2018-09-24 09:32:16</sys_updated_on>
+    </sys_embedded_help_role>
+</record_update>

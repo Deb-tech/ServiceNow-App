@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element extends="sys_import_set_row" label="Problems" max_length="40" name="x_dynat_ruxit_problems" type="collection">
-        <element label="Assignment Group" max_length="32" name="assignment_group" reference="sys_user_group" type="reference"/>
-        <element label="Caller" max_length="32" name="caller" reference="sys_user" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Assignment Group" max_length="32" name="assignment_group" reference="sys_user_group" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Caller" max_length="32" name="caller" reference="sys_user" type="reference"/>
         <element label="Category" max_length="255" name="category" type="string"/>
-        <element label="Company" max_length="255" name="company" reference="core_company" type="reference"/>
-        <element label="Configuration Item" max_length="32" name="configuration_item" reference="cmdb_ci" type="reference"/>
-        <element label="Problem Details" max_length="4000" name="details" type="html"/>
-        <element label="Impact" max_length="40" name="impact" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Company" max_length="255" name="company" reference="core_company" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Configuration Item" max_length="32" name="configuration_item" reference="cmdb_ci" type="reference"/>
+        <element attributes="edge_encryption_enabled=true" label="Problem Details" max_length="4000" name="details" type="html"/>
+        <element attributes="edge_encryption_enabled=true" label="Impact" max_length="40" name="impact" type="integer"/>
         <element label="Impacted CIs" max_length="2000" name="impacted_cis" type="string"/>
         <element label="Impact Level" max_length="30" name="impact_level" type="string"/>
-        <element display="true" label="Number" max_length="40" name="number" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" display="true" label="Number" max_length="40" name="number" type="integer"/>
         <element label="Problem ID" max_length="100" name="problem_id" type="string_full_utf8"/>
         <element label="Problem State" max_length="20" name="problem_state" type="string"/>
         <element label="Problem Title" max_length="250" name="problem_title" type="string_full_utf8"/>
         <element label="Problem URL" max_length="1024" name="problem_url" type="url"/>
         <element label="Subcategory" max_length="255" name="subcategory" type="string"/>
         <element label="Tags" max_length="2000" name="tags" type="string_full_utf8"/>
-        <element label="Urgency" max_length="40" name="urgency" type="integer"/>
+        <element attributes="edge_encryption_enabled=true" label="Urgency" max_length="40" name="urgency" type="integer"/>
         <index name="index">
             <element name="caller"/>
         </index>
@@ -25,6 +25,9 @@
         </index>
         <index name="index3">
             <element name="configuration_item"/>
+        </index>
+        <index name="index4">
+            <element name="company"/>
         </index>
     </element>
 </database>
