@@ -216,6 +216,84 @@ function getProcessGroups(tagFilter, apiUrl, token, mid) {
 	return res;
 }
 
+/* Mapping of OneAgent provided os type and version to CMDB os types.
+*/
+function extractOperatingSystem(osType, osString) {
+	var hostTypes = {'LINUX' : 'Linux', 'WINDOWS' : 'Windows', 'AIX' : 'AIX'};
+	if(osType == 'WINDOWS') {
+		var wStr = "Windows ";
+		if(osString.indexOf('2000') != -1) {
+			wStr += "2000 ";
+		}
+		else if(osString.indexOf('2003') != -1) {
+			wStr += "2003 ";
+		}
+		else if(osString.indexOf('2008') != -1) {
+			wStr += "2008 ";
+		}
+		else if(osString.indexOf('2012') != -1) {
+			wStr += "2012 ";
+		}
+		else if(osString.indexOf('2016') != -1) {
+			wStr += "2016 ";
+		}
+		else if(osString.indexOf('2019') != -1) {
+			wStr += "2019 ";
+		}
+		
+		if(osString.toLowerCase().indexOf('advanced') != -1) {
+			wStr += "Advanced Server";
+		}
+		else if(osString.toLowerCase().indexOf('datacenter') != -1 && osString.toLowerCase().indexOf('server') != -1) {
+			wStr += "Datacenter Server";
+		}
+		else if(osString.toLowerCase().indexOf('datacenter') != -1) {
+			wStr += "Datacenter";
+		}
+		else if(osString.toLowerCase().indexOf('standard') != -1) {
+			wStr += "Standard";
+		}
+		else if(osString.toLowerCase().indexOf('web') != -1) {
+			wStr += "Web";
+		}
+		else if(osString.toLowerCase().indexOf('enterprise') != -1) {
+			wStr += "Enterprise";
+		}
+		else if(osString.toLowerCase().indexOf('professional') != -1) {
+			wStr += "Professional";
+		}
+		else if(osString.toLowerCase().indexOf('server') != -1) {
+			wStr += "Server";
+		}
+		
+		return wStr;
+	}
+	else if(osType == 'LINUX') {
+		if(osString.toLowerCase().indexOf('ubuntu') != -1) {
+			return 'Linux Ubuntu';
+		}
+		else if(osString.toLowerCase().indexOf('red hat') != -1) {
+			return 'Linux Red Hat';
+		}
+		else if(osString.toLowerCase().indexOf('core os') != -1) {
+			return 'Linux CoreOS';
+		}
+		else if(osString.toLowerCase().indexOf('fedora') != -1) {
+			return 'Linux Fedora';
+		}
+		else if(osString.toLowerCase().indexOf('suse') != -1) {
+			return 'Linux SuSe';
+		}
+	} 
+	return hostTypes[osType];
+}
+
+/* Mapping of OneAgent provided os string to CMDB os version.
+*/
+function extractOperatingSystemVersion(osType, osString) {
+	return osString;
+}
+
 // fetches all hosts, processes and process groups from Dynatrace API and 
 // creates or updates SNOW server, web servers and services
 // Hosts and their relationships are tagged filtered.
@@ -249,10 +327,10 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 			var values = {};
 			values['name'] = hosts[key]['displayName'];
 			values['correlation_id'] = key;
-			values['os'] = hosts[key]['osType'];
-			values['os_version'] = hosts[key]['osVersion'];
+			values['os'] = extractOperatingSystem(p[i]['osType'], hosts[key]['osVersion']);
+			values['os_version'] = extractOperatingSystemVersion(p[i]['osType'], hosts[key]['osVersion']);;
 			values['cpu_type'] = hosts[key]['osArchitecture'];
-			values['cpu_count'] = hosts[key]['cpuCores'];
+			values['cpu_core_count'] = hosts[key]['cpuCores'];
 			values['operational_status'] = "1";
 			if(hosts[key]['ipAddresses'].length > 1) {
 				values['ip_address'] = hosts[key]['ipAddresses'][0]; // enter first IP directly
@@ -396,14 +474,14 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_created_by>Admin</sys_created_by>
         <sys_created_on>2017-11-10 13:39:35</sys_created_on>
         <sys_id>6a609f52db52cf40190bd92b5e96191c</sys_id>
-        <sys_mod_count>340</sys_mod_count>
+        <sys_mod_count>353</sys_mod_count>
         <sys_name>Dynatrace CMDB Sync</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sysauto_script_6a609f52db52cf40190bd92b5e96191c</sys_update_name>
         <sys_updated_by>wolfgang</sys_updated_by>
-        <sys_updated_on>2018-09-25 11:14:34</sys_updated_on>
+        <sys_updated_on>2018-10-16 06:32:11</sys_updated_on>
         <upgrade_safe>false</upgrade_safe>
     </sysauto_script>
 </record_update>
