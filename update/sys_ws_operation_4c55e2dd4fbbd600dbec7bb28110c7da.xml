@@ -33,7 +33,7 @@ function extractEnvId(url) {
 }
 
 // Use the problems REST API to fetch the problem details
-function fetchProblemDetails(url, apiToken, problem) {
+function fetchProblemDetails(url, apiToken, mid, problem) {
 	// try to mach with CI 
 	var problemid = problem['pid'];
 	// create the incident
@@ -55,6 +55,10 @@ function fetchProblemDetails(url, apiToken, problem) {
 	
 	// fetch problem details
 	var restMessage = new sn_ws.RESTMessageV2();
+	if(mid) {
+		restMessage.setMIDServer(mid);
+		restMessage.setEccParameter( 'skip_sensor', 'true' );
+	}
 	var apiUrl = url + "/api/v1/problem/details/" + problemid;
 	restMessage.setHttpMethod('get');
 	restMessage.setRequestHeader('Authorization', 'Api-Token ' + apiToken);
@@ -155,12 +159,17 @@ function fetchProblemDetails(url, apiToken, problem) {
 		// extract environment 
 		var environmentId = extractEnvId(apiUrl); 
 		gs.debug("Dynatrace configured environment: " + environmentId);
+		var mid = null;
+		if(environment['mid']) {
+			mid = environment['mid'].name;
+			gs.debug("Dynatrace uses a user defined MID server: " + mid);
+		}
 		
 		var apiToken = environment['api_token'].getDecryptedValue();
 		// check if we find the environment id within one of the configured environments
 		if(requestBody.data['url'].contains(environmentId) || requestBody.data['url'].contains("https://example.com")) {
 			// now start to fetch the problem details
-			fetchProblemDetails(apiUrl, apiToken, requestBody.data);
+			fetchProblemDetails(apiUrl, apiToken, mid, requestBody.data);
 			found = true;
 			break;
 		}
@@ -182,14 +191,14 @@ function fetchProblemDetails(url, apiToken, problem) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-06-03 08:51:21</sys_created_on>
         <sys_id>4c55e2dd4fbbd600dbec7bb28110c7da</sys_id>
-        <sys_mod_count>162</sys_mod_count>
+        <sys_mod_count>163</sys_mod_count>
         <sys_name>Problem</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ws_operation_4c55e2dd4fbbd600dbec7bb28110c7da</sys_update_name>
-        <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2017-12-07 10:44:01</sys_updated_on>
+        <sys_updated_by>wolfgang</sys_updated_by>
+        <sys_updated_on>2018-10-30 14:11:47</sys_updated_on>
         <web_service_definition display_value="Problem Notification">37c462dd4fbbd600dbec7bb28110c7ac</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
