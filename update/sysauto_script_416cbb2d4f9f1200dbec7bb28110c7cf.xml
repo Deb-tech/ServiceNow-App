@@ -4,7 +4,7 @@
         <condition/>
         <conditional>false</conditional>
         <name>Synchronize hosts job</name>
-        <run_as display_value="System Administrator">6816f79cc0a8016401c5a33be04be441</run_as>
+        <run_as/>
         <run_as_tz/>
         <run_dayofmonth>1</run_dayofmonth>
         <run_dayofweek>1</run_dayofweek>
@@ -184,14 +184,14 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-05-10 13:22:25</sys_created_on>
         <sys_id>416cbb2d4f9f1200dbec7bb28110c7cf</sys_id>
-        <sys_mod_count>112</sys_mod_count>
+        <sys_mod_count>113</sys_mod_count>
         <sys_name>Synchronize hosts job</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sysauto_script_416cbb2d4f9f1200dbec7bb28110c7cf</sys_update_name>
-        <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2017-12-22 07:39:39</sys_updated_on>
+        <sys_updated_by>wolfgang</sys_updated_by>
+        <sys_updated_on>2018-10-30 11:48:34</sys_updated_on>
         <upgrade_safe>false</upgrade_safe>
     </sysauto_script>
 </record_update>
