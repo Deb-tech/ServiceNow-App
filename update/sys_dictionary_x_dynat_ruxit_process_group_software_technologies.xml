@@ -53,15 +53,15 @@
         <sys_class_name>sys_dictionary</sys_class_name>
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2018-09-12 15:57:01</sys_created_on>
-        <sys_id>0f146267dbb0ef00190bd92b5e9619c7</sys_id>
+        <sys_id>8f896874db6d2700190bd92b5e9619d0</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>Software technologies</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_dictionary_x_dynat_ruxit_process_group_software_technologies</sys_update_name>
-        <sys_updated_by>wolfgang</sys_updated_by>
-        <sys_updated_on>2018-10-03 10:22:44</sys_updated_on>
+        <sys_updated_by>system</sys_updated_by>
+        <sys_updated_on>2018-10-31 19:07:37</sys_updated_on>
         <table_reference>false</table_reference>
         <text_index>false</text_index>
         <unique>false</unique>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_dynat_ruxit.dynatrace</api_name>
+        <client_callable>true</client_callable>
+        <description>Defines several helper functions that are used within the Dynatrace scoped app</description>
+        <name>dynatrace</name>
+        <script><![CDATA[var dynatrace = Class.create();
+
+dynatrace.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+	
+	urlClean: function (url) {
+		url = url.trim();
+		if(!url.startsWith("https://")) {
+			url = "https://" + url;
+		}
+		if(url.endsWith("/")) {
+			url = url.substring(0, url.length - 1);
+		}
+		if(!url.contains('.')) {
+			url = url + ".live.dynatrace.com";
+		}
+		return url;
+	},
+    
+	/** Checks is the actual configuration given by the user contains any issues. 
+	  */
+	checkConfiguration: function () {
+		var results = { "errors" : [] };
+		//var buildingid = this.getParameter('sysparm_buildingid');
+		gs.error('Dynatrace config check run!');
+		// first check if the 'Configuration Management for Scoped Apps' is active (table: v_plugin, id:com.snc.cmdb.scoped, acive: active)
+		var pl = new GlideRecord('v_plugin'); 
+		pl.addQuery('id','com.snc.cmdb.scoped');
+		pl.query(); 
+		if (pl.next()) { 
+			if(pl.getValue("active") != 'active') {
+				results.errors.push("Plugin 'Configuration Management for Scoped Apps' found but not active!");
+			}
+			// plugin found and active, everything ok
+		}
+		else {
+			results.errors.push("Plugin 'Configuration Management for Scoped Apps' not found!");
+		}
+		// second check if there exists a discovery source 'DYNATRACE' (sys_choice)
+		var ds = new GlideRecord('sys_choice'); 
+		ds.addQuery('value','DYNATRACE');
+		ds.query(); 
+		if (ds.next()) { 
+			if(ds.getValue("label") != 'DYNATRACE') {
+				results.errors.push("Discovery source 'DYNATRACE' has set a wrong label: " + ds.getValue("label"));
+			}
+			if(ds.getValue("element") != 'discovery_source') {
+				results.errors.push("Discovery source 'DYNATRACE' has set a wrong element: " + ds.getValue("element"));
+			}
+			if(ds.getValue("name") != 'cmdb_ci') {
+				results.errors.push("Discovery source 'DYNATRACE' has set a wrong table: " + ds.getValue("name"));
+			}
+		}
+		else {
+			results.errors.push("Discovery source 'DYNATRACE' not found!");
+		}
+		// third check the connectivity for all configured environments
+		// read all configured environments and sync the components
+		var environment = new GlideRecord('x_dynat_ruxit_environments');
+		environment.query();   
+		while (environment.next()) {   
+			var apiUrl = dynatrace.prototype.urlClean.call(this,environment['dynatrace_environment_api_url']);
+			var isActive = "" + environment['active'];
+			if (isActive == "false") {
+				continue;
+			}
+			var apiToken = environment['api_token'].getDecryptedValue();
+			var mid = null;
+			if(environment['mid']) {
+				mid = environment['mid'].name;
+			}
+			
+			var restMessage = new sn_ws.RESTMessageV2();
+			if(mid) {
+				restMessage.setMIDServer(mid);
+				restMessage.setEccParameter( 'skip_sensor', 'true' );
+			}
+			
+			var url = apiUrl + "/api/v1/time";
+			
+			restMessage.setHttpMethod('get');
+			restMessage.setRequestHeader('Authorization', 'Api-Token ' + apiToken);
+			restMessage.setEndpoint(url);
+			
+			var response = restMessage.execute();
+			status = response.getStatusCode();
+			if(status != 200) {
+				results.errors.push("Connection issue with Dynatrace environment: " + environment['environment_name']);
+			}
+		}
+		
+		// return all errors
+        return JSON.stringify(results);         
+	}
+});
+]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>wolfgang</sys_created_by>
+        <sys_created_on>2018-10-31 14:51:30</sys_created_on>
+        <sys_id>f29ce3acdb692700190bd92b5e9619f3</sys_id>
+        <sys_mod_count>53</sys_mod_count>
+        <sys_name>dynatrace</sys_name>
+        <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
+        <sys_update_name>sys_script_include_f29ce3acdb692700190bd92b5e9619f3</sys_update_name>
+        <sys_updated_by>wolfgang</sys_updated_by>
+        <sys_updated_on>2018-10-31 20:11:24</sys_updated_on>
+    </sys_script_include>
+</record_update>

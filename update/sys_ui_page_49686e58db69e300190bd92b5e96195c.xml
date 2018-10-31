@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
     <sys_ui_page action="INSERT_OR_UPDATE">
         <category/>
-        <client_script><![CDATA[
+        <client_script><![CDATA[var ga = new GlideAjax('dynatrace');
+ga.addParam('sysparm_name', 'checkConfiguration');
+//ga.addParam('sysparm_buildingid', g_form.getValue("u_building"));
+ga.getXML(updateUI);
+
+function updateUI(response) {
+	var answer = response.responseXML.documentElement.getAttribute("answer");
+	if (answer) {
+		var returneddata = answer.evalJSON(true);
+		$('configCheckMsg').html = "nix";
+		alert('finished!' + JSON.stringify(returneddata));
+    } else {
+        alert('nix!');       
+    }
+}
 ]]></client_script>
         <description/>
         <direct>false</direct>
@@ -36,6 +50,17 @@
 				</tr>
 				<tr>
 					<td>
+						<h2 id="configCheckTitle">Automatic configuration check detected following errors:</h2>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p id="configCheckMsg" name="configCheckMsg">
+						</p>	
+					</td>
+				</tr>
+				<tr>
+					<td>
 						<h2>Contact Us:</h2>
 					</td>
 				</tr>
@@ -56,13 +81,13 @@
         <sys_created_by>wolfgang</sys_created_by>
         <sys_created_on>2018-10-30 15:16:30</sys_created_on>
         <sys_id>49686e58db69e300190bd92b5e96195c</sys_id>
-        <sys_mod_count>12</sys_mod_count>
+        <sys_mod_count>31</sys_mod_count>
         <sys_name>Dynatrace Support</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ui_page_49686e58db69e300190bd92b5e96195c</sys_update_name>
         <sys_updated_by>wolfgang</sys_updated_by>
-        <sys_updated_on>2018-10-31 08:02:53</sys_updated_on>
+        <sys_updated_on>2018-10-31 20:55:58</sys_updated_on>
     </sys_ui_page>
 </record_update>
