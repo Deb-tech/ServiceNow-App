@@ -59,6 +59,7 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 		restMessage.setMIDServer(mid);
 		restMessage.setEccParameter( 'skip_sensor', 'true' );
 	}
+	
 	var apiUrl = url + "/api/v1/problem/details/" + problemid;
 	restMessage.setHttpMethod('get');
 	restMessage.setRequestHeader('Authorization', 'Api-Token ' + apiToken);
@@ -97,7 +98,8 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 		}
 	}
 	else {
-		gs.error("Dynatrace app failed to fetch problem details");
+		gs.error("Dynatrace app failed to fetch problem details with HTTP code: " + status);
+		gs.error("Dynatrace app failed to fetch problem details for: " + apiUrl);
 	}
 	
 	srv.update();
@@ -191,14 +193,14 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-06-03 08:51:21</sys_created_on>
         <sys_id>4c55e2dd4fbbd600dbec7bb28110c7da</sys_id>
-        <sys_mod_count>163</sys_mod_count>
+        <sys_mod_count>168</sys_mod_count>
         <sys_name>Problem</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ws_operation_4c55e2dd4fbbd600dbec7bb28110c7da</sys_update_name>
         <sys_updated_by>wolfgang</sys_updated_by>
-        <sys_updated_on>2018-10-30 14:11:47</sys_updated_on>
+        <sys_updated_on>2018-11-01 09:48:35</sys_updated_on>
         <web_service_definition display_value="Problem Notification">37c462dd4fbbd600dbec7bb28110c7ac</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
