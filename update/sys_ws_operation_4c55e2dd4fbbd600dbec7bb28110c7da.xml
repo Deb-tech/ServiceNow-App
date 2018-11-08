@@ -22,6 +22,19 @@ function urlClean(url) {
 	return url;
 }
 
+// Test notifications sent by Dynatrace
+// are guaranteed to contain the URL
+// https://www.example.com
+// Making that value configurable (e.g. via System Property)
+// would open up to break that contract by SNOW users.
+function isTestNotification(problem) {
+	var url = problem['url'];
+	if (!url) {
+		return false;
+	}
+	return url.contains("https://example.com");
+}
+
 // extract the environment id from the environment Url
 function extractEnvId(url) {
 	if(url.contains("/e/")) {
@@ -52,6 +65,13 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 	srv.setValue('impact_level', problem['impact']);
 	srv.setValue('details', problem['details'] );  
 	srv.setValue('tags', '' + problem['tags'] );  
+	
+	// if this is a test notification it doesn't make any
+	// sense to reach out to the tenant for problem details
+	if (isTestNotification(problem)) {
+		srv.update();
+		return;
+	}
 	
 	// fetch problem details
 	var restMessage = new sn_ws.RESTMessageV2();
@@ -169,7 +189,7 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 		
 		var apiToken = environment['api_token'].getDecryptedValue();
 		// check if we find the environment id within one of the configured environments
-		if(requestBody.data['url'].contains(environmentId) || requestBody.data['url'].contains("https://example.com")) {
+		if(requestBody.data['url'].contains(environmentId) || isTestNotification(requestBody.data)) {
 			// now start to fetch the problem details
 			fetchProblemDetails(apiUrl, apiToken, mid, requestBody.data);
 			found = true;
@@ -193,14 +213,14 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-06-03 08:51:21</sys_created_on>
         <sys_id>4c55e2dd4fbbd600dbec7bb28110c7da</sys_id>
-        <sys_mod_count>168</sys_mod_count>
+        <sys_mod_count>169</sys_mod_count>
         <sys_name>Problem</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ws_operation_4c55e2dd4fbbd600dbec7bb28110c7da</sys_update_name>
-        <sys_updated_by>wolfgang</sys_updated_by>
-        <sys_updated_on>2018-11-01 09:48:35</sys_updated_on>
+        <sys_updated_by>reinhard</sys_updated_by>
+        <sys_updated_on>2018-11-08 11:59:40</sys_updated_on>
         <web_service_definition display_value="Problem Notification">37c462dd4fbbd600dbec7bb28110c7ac</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
