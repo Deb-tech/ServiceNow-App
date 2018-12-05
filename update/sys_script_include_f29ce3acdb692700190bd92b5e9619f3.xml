@@ -11,13 +11,13 @@
 dynatrace.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	
 	/* Strips a potental fuly qualified host name from its domain and returns
-	   the short hst name.
+	   the short host name in lower case letters (which is the default from ServiceNow.
 	*/
-	shortHostName: function (fullNostName) {
-		if(!fullNostName.contains('.')) {
-			return fullHostName;
+	shortHostName: function (hostName) {
+		if(!hostName.contains('.')) {
+			return hostName.toLowerCase();
 		}
-		return fullNostName.substring(0, fullNostName.indexOf(".")); // return short host name without domain part
+		return hostName.substring(0, hostName.indexOf(".")).toLowerCase(); // return short host name without domain part
 	},
 	
 	/* Cleans the SaaS live url and returns the full API base url */
@@ -116,13 +116,13 @@ dynatrace.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
         <sys_created_by>wolfgang</sys_created_by>
         <sys_created_on>2018-10-31 14:51:30</sys_created_on>
         <sys_id>f29ce3acdb692700190bd92b5e9619f3</sys_id>
-        <sys_mod_count>58</sys_mod_count>
+        <sys_mod_count>59</sys_mod_count>
         <sys_name>dynatrace</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_script_include_f29ce3acdb692700190bd92b5e9619f3</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2018-12-05 06:10:54</sys_updated_on>
+        <sys_updated_on>2018-12-05 07:13:54</sys_updated_on>
     </sys_script_include>
 </record_update>
