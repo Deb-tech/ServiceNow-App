@@ -142,48 +142,46 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 	
 	// only add affected CIs if we open a problem
 	if(status == 200) {
-		if(problem['state'] == "OPEN" || problem['state'] == "MERGED") {
-			// open CIs affected table
-			var cis_aff = new GlideRecord("x_dynat_ruxit_affectedcis"); 
-			// impacted_cis
-			var imCis = "";
-			for(var y = 0; y < pDetails.result.rankedEvents.length; y++) {
-				
-				if(imCis.indexOf(pDetails.result.rankedEvents[y].entityId) == -1) { // avoid multiple identical entries
-					imCis += pDetails.result.rankedEvents[y].entityId;
-					if(y < pDetails.result.rankedEvents.length - 1) {
-						imCis += ',';
-					}
+		// open CIs affected table
+		var cis_aff = new GlideRecord("x_dynat_ruxit_affectedcis"); 
+		// impacted_cis
+		var imCis = "";
+		for(var y = 0; y < pDetails.result.rankedEvents.length; y++) {	
+			if(imCis.indexOf(pDetails.result.rankedEvents[y].entityId) == -1) { // avoid multiple identical entries
+				imCis += pDetails.result.rankedEvents[y].entityId;
+				if(y < pDetails.result.rankedEvents.length - 1) {
+					imCis += ',';
+				}
+				// query for CI reference and store in table
+				// open CI to MEID mapping table
+				var m = new GlideRecord("x_dynat_ruxit_ci_mapping"); 
+				m.initialize();
+				m.addQuery('dynatrace_meid', pDetails.result.rankedEvents[y].entityId);
+				m.query();
+				if(m.next()) {
+					cis_aff.initialize();
+					cis_aff.setValue('problem', '' + problemid);
+					cis_aff.setValue('affected_ci', m.getValue('sn_configuration_item'));
+					cis_aff.insert();
+				}
 
-					// query for CI reference and store in table
-					// open CI to MEID mapping table
-					var m = new GlideRecord("x_dynat_ruxit_ci_mapping"); 
-					m.initialize();
-					m.addQuery('dynatrace_meid', pDetails.result.rankedEvents[y].entityId);
-					m.query();
-					if(m.next()) {
-						cis_aff.initialize();
-						cis_aff.setValue('problem', '' + problemid);
-						cis_aff.setValue('affected_ci', m.getValue('sn_configuration_item'));
-						cis_aff.insert();
-					}
-
-					// query for synced service, application or host CMDB CIs 
-					var index = new GlideRecord("cmdb_ci"); 
-					if(index.get('correlation_id', pDetails.result.rankedEvents[y].entityId)) {
-						cis_aff.initialize();
-						cis_aff.setValue('problem', '' + problemid);
-						cis_aff.setValue('affected_ci', index.getValue('sys_id'));
-						cis_aff.insert();
-					}
+				// query for synced service, application or host CMDB CIs 
+				var index = new GlideRecord("cmdb_ci"); 
+				if(index.get('correlation_id', pDetails.result.rankedEvents[y].entityId)) {
+					cis_aff.initialize();
+					cis_aff.setValue('problem', '' + problemid);
+					cis_aff.setValue('affected_ci', index.getValue('sys_id'));
+					cis_aff.insert();
 				}
 			}
 			srv.setValue('impacted_cis', imCis);
 			srv.update();
 		}	
+	} 
+	else {
+		gs.error("Dynatrace app failed to fetch problem details with HTTP code: " + status);
 	}
 }
-
 
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 	var requestBody = request.body;
@@ -229,14 +227,14 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-06-03 08:51:21</sys_created_on>
         <sys_id>4c55e2dd4fbbd600dbec7bb28110c7da</sys_id>
-        <sys_mod_count>171</sys_mod_count>
+        <sys_mod_count>172</sys_mod_count>
         <sys_name>Problem</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ws_operation_4c55e2dd4fbbd600dbec7bb28110c7da</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-02-18 13:52:26</sys_updated_on>
+        <sys_updated_on>2019-02-21 08:15:02</sys_updated_on>
         <web_service_definition display_value="Problem Notification">37c462dd4fbbd600dbec7bb28110c7ac</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
