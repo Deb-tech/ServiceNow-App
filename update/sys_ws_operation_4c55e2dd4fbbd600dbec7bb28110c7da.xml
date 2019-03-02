@@ -98,12 +98,10 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 			else {
 				gs.error("Dynatrace app failed to fetch problem details for: " + url + " status: " + status);
 				gs.error("Dynatrace problem fetch retry count: " + retries);
-				gs.sleep(10000);
 			}
 		}
 		catch(Exception) {
 			gs.error("Dynatrace app failed to fetch problem details for: " + url);
-			gs.sleep(10000);
 		}
 		retries = retries - 1;
 	}
@@ -185,7 +183,8 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 }
 
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
-	var requestBody = request.body;
+	var requestBody = request.body; 
+
 	// We have to find the right environment where the problem was pushed from
 	var environment = new GlideRecord('x_dynat_ruxit_environments');
 	environment.query();   
@@ -228,14 +227,14 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-06-03 08:51:21</sys_created_on>
         <sys_id>4c55e2dd4fbbd600dbec7bb28110c7da</sys_id>
-        <sys_mod_count>174</sys_mod_count>
+        <sys_mod_count>186</sys_mod_count>
         <sys_name>Problem</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ws_operation_4c55e2dd4fbbd600dbec7bb28110c7da</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-02-22 06:16:21</sys_updated_on>
+        <sys_updated_on>2019-03-02 06:26:24</sys_updated_on>
         <web_service_definition display_value="Problem Notification">37c462dd4fbbd600dbec7bb28110c7ac</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
