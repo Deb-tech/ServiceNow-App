@@ -1,240 +1,268 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update>
     <sys_ui_section caption="" section_id="e1bd26514ffbd600dbec7bb28110c77e" sys_domain="global" table="x_dynat_ruxit_problems" version="3" view="">
         <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>problem_state</element>
+            <element>environment</element>
             <position>0</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-06-03 09:27:54</sys_created_on>
-            <sys_id>3bddea514ffbd600dbec7bb28110c7f2</sys_id>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>c877a964db40f740190bd92b5e96193c</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-06-03 09:27:54</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>problem_state</element>
+            <position>1</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>4c77a964db40f740190bd92b5e96193c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>impact_level</element>
-            <position>1</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-06-03 09:27:54</sys_created_on>
-            <sys_id>7bddea514ffbd600dbec7bb28110c7f2</sys_id>
+            <position>2</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>cc77a964db40f740190bd92b5e96193c</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-06-03 09:27:54</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>number</element>
-            <position>2</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-06-03 09:27:54</sys_created_on>
-            <sys_id>bbddea514ffbd600dbec7bb28110c7f2</sys_id>
+            <position>3</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>4077a964db40f740190bd92b5e96193d</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-06-03 09:27:54</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>problem_title</element>
-            <position>3</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-06-03 09:27:54</sys_created_on>
-            <sys_id>fbddea514ffbd600dbec7bb28110c7f2</sys_id>
+            <position>4</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>c077a964db40f740190bd92b5e96193d</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-06-03 09:27:54</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>details</element>
-            <position>4</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-06-03 09:27:54</sys_created_on>
-            <sys_id>3fddea514ffbd600dbec7bb28110c7f2</sys_id>
+            <position>5</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>4477a964db40f740190bd92b5e96193d</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-06-03 09:27:54</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>problem_url</element>
-            <position>5</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-06-03 09:27:54</sys_created_on>
-            <sys_id>7fddea514ffbd600dbec7bb28110c7f2</sys_id>
+            <position>6</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>c477a964db40f740190bd92b5e96193d</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-06-03 09:27:54</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>problem_id</element>
-            <position>6</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-06-03 09:27:54</sys_created_on>
-            <sys_id>bfddea514ffbd600dbec7bb28110c7f2</sys_id>
+            <position>7</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>4877a964db40f740190bd92b5e96193d</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-06-03 09:27:54</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>company</element>
-            <position>7</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-07-29 07:55:17</sys_created_on>
-            <sys_id>49b1bed74f74e640dbec7bb28110c70b</sys_id>
+            <position>8</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>c877a964db40f740190bd92b5e96193d</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-07-29 07:55:17</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>configuration_item</element>
-            <position>8</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-08-01 18:56:28</sys_created_on>
-            <sys_id>37c5ac244f452a40dbec7bb28110c7f3</sys_id>
+            <position>9</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>4c77a964db40f740190bd92b5e96193d</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-08-01 18:56:28</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>assignment_group</element>
-            <position>9</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-08-02 05:57:58</sys_created_on>
-            <sys_id>e13d7ea44fc52a40dbec7bb28110c7d4</sys_id>
+            <position>10</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>cc77a964db40f740190bd92b5e96193d</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-08-02 05:57:58</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>caller</element>
-            <position>10</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-08-02 05:59:03</sys_created_on>
-            <sys_id>517dfea44fc52a40dbec7bb28110c7d2</sys_id>
+            <position>11</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>4077a964db40f740190bd92b5e96193e</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-08-02 05:59:03</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>category</element>
-            <position>11</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-08-02 05:59:42</sys_created_on>
-            <sys_id>439dbaa44fc52a40dbec7bb28110c7ef</sys_id>
+            <position>12</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>c077a964db40f740190bd92b5e96193e</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-08-02 05:59:42</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>subcategory</element>
-            <position>12</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-08-02 06:00:15</sys_created_on>
-            <sys_id>03bdbea44fc52a40dbec7bb28110c7a6</sys_id>
+            <position>13</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>4477a964db40f740190bd92b5e96193e</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-08-02 06:00:15</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>impact</element>
-            <position>13</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-08-02 06:00:49</sys_created_on>
-            <sys_id>53ddfaa44fc52a40dbec7bb28110c722</sys_id>
+            <position>14</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>c477a964db40f740190bd92b5e96193e</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-08-02 06:00:49</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>urgency</element>
-            <position>14</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-08-02 06:01:17</sys_created_on>
-            <sys_id>5afd32e44fc52a40dbec7bb28110c78b</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_ui_formatter/>
-            <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-08-02 06:01:17</sys_updated_on>
-            <sys_user/>
-            <type/>
-        </sys_ui_element>
-        <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>impacted_cis</element>
             <position>15</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-08-06 06:25:04</sys_created_on>
-            <sys_id>2dc923fd4f496a40dbec7bb28110c716</sys_id>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>4877a964db40f740190bd92b5e96193e</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-08-06 06:25:04</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>tags</element>
             <position>16</position>
-            <sys_created_by>admin</sys_created_by>
-            <sys_created_on>2016-08-08 12:49:39</sys_created_on>
-            <sys_id>2ef497664f05aa40dbec7bb28110c7df</sys_id>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>c877a964db40f740190bd92b5e96193e</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
-            <sys_updated_by>admin</sys_updated_by>
-            <sys_updated_on>2016-08-08 12:49:39</sys_updated_on>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>impacted_cis</element>
+            <position>17</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>4c77a964db40f740190bd92b5e96193e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>impacted_ci_names</element>
+            <position>18</position>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:36:12</sys_created_on>
+            <sys_id>cc77a964db40f740190bd92b5e96193e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_dynat_ruxit_problems" sys_domain="global" view="Default view">e1bd26514ffbd600dbec7bb28110c77e</sys_ui_section>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:36:12</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>

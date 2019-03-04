@@ -6,8 +6,10 @@
         <element attributes="edge_encryption_enabled=true" label="Company" max_length="255" name="company" reference="core_company" type="reference"/>
         <element attributes="edge_encryption_enabled=true" label="Configuration Item" max_length="32" name="configuration_item" reference="cmdb_ci" type="reference"/>
         <element attributes="edge_encryption_enabled=true" label="Problem Details" max_length="4000" name="details" type="html"/>
+        <element label="Environment" max_length="255" name="environment" type="string_full_utf8"/>
         <element attributes="edge_encryption_enabled=true" label="Impact" max_length="40" name="impact" type="integer"/>
         <element label="Impacted CIs" max_length="2000" name="impacted_cis" type="string"/>
+        <element label="Impacted CI Names" max_length="255" name="impacted_ci_names" type="string_full_utf8"/>
         <element label="Impact Level" max_length="30" name="impact_level" type="string"/>
         <element attributes="edge_encryption_enabled=true" display="true" label="Number" max_length="40" name="number" type="integer"/>
         <element label="Problem ID" max_length="100" name="problem_id" type="string_full_utf8"/>

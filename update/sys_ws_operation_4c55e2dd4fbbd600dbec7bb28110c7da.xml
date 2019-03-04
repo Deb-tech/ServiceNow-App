@@ -182,36 +182,69 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 	}
 }
 
-(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
-	var requestBody = request.body; 
-
-	// We have to find the right environment where the problem was pushed from
-	var environment = new GlideRecord('x_dynat_ruxit_environments');
-	environment.query();   
-	var found = false; 
-	gs.debug("Dynatrace received problem: " + requestBody.data['url']);
-	while (environment.next()) {   
-		var apiUrl = urlClean(environment['dynatrace_environment_api_url']);
-		// extract environment 
-		var environmentId = extractEnvId(apiUrl); 
-		gs.debug("Dynatrace configured environment: " + environmentId);
-		var mid = null;
-		if(environment['mid']) {
-			mid = environment['mid'].name;
-			gs.debug("Dynatrace uses a user defined MID server: " + mid);
-		}
-		
-		var apiToken = environment['api_token'].getDecryptedValue();
-		// check if we find the environment id within one of the configured environments
-		if(requestBody.data['url'].contains(environmentId) || isTestNotification(requestBody.data)) {
-			// now start to fetch the problem details
-			fetchProblemDetails(apiUrl, apiToken, mid, requestBody.data);
-			found = true;
-			break;
+// The new way of processing problem details without the need for backchannel
+function processProblemDetails(pDetails) {
+	gs.error("Wolfgang : YES YES");
+	// create the incident
+	srv = new GlideRecord("x_dynat_ruxit_problems"); 
+	srv.initialize();
+	srv.setValue('number', pDetails['nr'] ); 
+	srv.setValue('problem_id', pDetails['pid']);  
+	srv.setValue('problem_title', pDetails['title']);  
+	srv.setValue('problem_state', pDetails['state']);  
+	srv.setValue('problem_url', pDetails['url']);  
+	srv.setValue('impact_level', pDetails['impact']);
+	srv.setValue('details', pDetails['details'] );
+	srv.setValue('tags', '' + pDetails['tags'].toString());  
+	i_cis = ""; // impacted CI Dynatrace IDs
+	i_ci_names = ""; // impacted CI names with attached Dynatrace types
+	for(idx = 0; idx < pDetails['impactedEntities'].length; idx++) {
+		i_cis += pDetails['impactedEntities'][idx]['entity'];
+		i_ci_names += pDetails['impactedEntities'][idx]['type'] + ":" + pDetails['impactedEntities'][idx]['name'];
+		if(idx == pDetails['impactedEntities'].length-1) {
+			i_cis += ',';
+			i_ci_names += ',';
 		}
 	}
-	if(!found) {
-		gs.error("Dynatrace problem received from an environment that is not configured within the environments list!");
+	srv.setValue('impacted_cis', i_cis);
+	srv.setValue('impacted_ci_names', i_ci_names);
+	srv.update();
+}
+
+(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+	var requestBody = request.body; 
+	if(requestBody.data['impactedEntities']) {
+		processProblemDetails(requestBody.data);
+	}
+	else { // old way, should get rid of this code when Dynatrace release version 165 is rolled out globally
+		// We have to find the right environment where the problem was pushed from
+		var environment = new GlideRecord('x_dynat_ruxit_environments');
+		environment.query();   
+		var found = false; 
+		gs.debug("Dynatrace received problem: " + requestBody.data['url']);
+		while (environment.next()) {   
+			var apiUrl = urlClean(environment['dynatrace_environment_api_url']);
+			// extract environment 
+			var environmentId = extractEnvId(apiUrl); 
+			gs.debug("Dynatrace configured environment: " + environmentId);
+			var mid = null;
+			if(environment['mid']) {
+				mid = environment['mid'].name;
+				gs.debug("Dynatrace uses a user defined MID server: " + mid);
+			}
+
+			var apiToken = environment['api_token'].getDecryptedValue();
+			// check if we find the environment id within one of the configured environments
+			if(requestBody.data['url'].contains(environmentId) || isTestNotification(requestBody.data)) {
+				// now start to fetch the problem details
+				fetchProblemDetails(apiUrl, apiToken, mid, requestBody.data);
+				found = true;
+				break;
+			}
+		}
+		if(!found) {
+			gs.error("Dynatrace problem received from an environment that is not configured within the environments list!");
+		}
 	}
 })(request, response);]]></operation_script>
         <operation_uri>/api/x_dynat_ruxit/problem_notification</operation_uri>
@@ -227,14 +260,14 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-06-03 08:51:21</sys_created_on>
         <sys_id>4c55e2dd4fbbd600dbec7bb28110c7da</sys_id>
-        <sys_mod_count>186</sys_mod_count>
+        <sys_mod_count>193</sys_mod_count>
         <sys_name>Problem</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ws_operation_4c55e2dd4fbbd600dbec7bb28110c7da</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-03-02 06:26:24</sys_updated_on>
+        <sys_updated_on>2019-03-04 11:38:49</sys_updated_on>
         <web_service_definition display_value="Problem Notification">37c462dd4fbbd600dbec7bb28110c7ac</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>

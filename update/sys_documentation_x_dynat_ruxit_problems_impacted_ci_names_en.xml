@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="impacted_ci_names" label="Impacted CI Names" language="en" table="x_dynat_ruxit_problems">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>impacted_ci_names</element>
+            <help/>
+            <hint/>
+            <label>Impacted CI Names</label>
+            <language>en</language>
+            <name>x_dynat_ruxit_problems</name>
+            <plural>Impacted CI Names</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin2</sys_created_by>
+            <sys_created_on>2019-03-04 11:29:33</sys_created_on>
+            <sys_id>3ee56de0db40f740190bd92b5e96199e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Impacted CI Names</sys_name>
+            <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
+            <sys_update_name>sys_documentation_x_dynat_ruxit_problems_impacted_ci_names_en</sys_update_name>
+            <sys_updated_by>admin2</sys_updated_by>
+            <sys_updated_on>2019-03-04 11:29:33</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>
