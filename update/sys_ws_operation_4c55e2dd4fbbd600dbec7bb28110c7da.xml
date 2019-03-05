@@ -198,6 +198,7 @@ function processProblemDetails(pDetails) {
 	srv.setValue('tags', '' + pDetails['tags'].toString());  
 	i_cis = ""; // impacted CI Dynatrace IDs
 	i_ci_names = ""; // impacted CI names with attached Dynatrace types
+	
 	for(idx = 0; idx < pDetails['impactedEntities'].length; idx++) {
 		i_cis += pDetails['impactedEntities'][idx]['entity'];
 		i_ci_names += pDetails['impactedEntities'][idx]['type'] + ":" + pDetails['impactedEntities'][idx]['name'];
@@ -206,13 +207,18 @@ function processProblemDetails(pDetails) {
 			i_ci_names += ',';
 		}
 	}
+	
 	srv.setValue('impacted_cis', i_cis);
 	srv.setValue('impacted_ci_names', i_ci_names);
+	srv.setValue('environment', pDetails['environmentName']);
 	srv.update();
 }
 
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 	var requestBody = request.body; 
+	
+	gs.error("TOBIAS: " + requestBody.dataString);
+	
 	if(requestBody.data['impactedEntities']) {
 		processProblemDetails(requestBody.data);
 	}
@@ -260,14 +266,14 @@ function processProblemDetails(pDetails) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-06-03 08:51:21</sys_created_on>
         <sys_id>4c55e2dd4fbbd600dbec7bb28110c7da</sys_id>
-        <sys_mod_count>193</sys_mod_count>
+        <sys_mod_count>198</sys_mod_count>
         <sys_name>Problem</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ws_operation_4c55e2dd4fbbd600dbec7bb28110c7da</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-03-04 11:38:49</sys_updated_on>
+        <sys_updated_on>2019-03-05 07:28:15</sys_updated_on>
         <web_service_definition display_value="Problem Notification">37c462dd4fbbd600dbec7bb28110c7ac</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
