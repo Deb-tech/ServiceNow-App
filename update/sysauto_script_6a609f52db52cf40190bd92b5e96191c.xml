@@ -90,7 +90,7 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 		item['className'] = 'x_dynat_ruxit_software_service';
 		var values = {};
 		values['name'] = items[key]['displayName'];
-		values['correlation_id'] = items[key]['entityId'];
+		values[gs.getProperty('x_dynat_ruxit.sync_field_name')] = items[key]['entityId'];
 		values['operational_status'] = "1";
 		values['comments'] = extractTags(items[key]['tags']);
 		var first = new Date(items[key]['firstSeenTimestamp']);
@@ -117,7 +117,7 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 					relItem['className'] = 'x_dynat_ruxit_software_service';
 					var relValues = {};
 					relValues['name'] = items[relKey]['displayName'];
-					relValues['correlation_id'] = items[relKey]['entityId'];
+					relValues[gs.getProperty('x_dynat_ruxit.sync_field_name')] = items[relKey]['entityId'];
 					relItem['values'] = relValues;
 					pl['items'].push(relItem);
 					// now enter the relationship
@@ -142,7 +142,7 @@ function pushServicesAndApps(tagFilter, apiUrl, token, pgs, mid) {
 					relRunsItem['className'] = 'x_dynat_ruxit_process_group';
 					var relRunsValues = {};
 					relRunsValues['name'] = pgs[relRunsKey]['displayName'];
-					relRunsValues['correlation_id'] = relRunsKey;
+					relRunsValues[gs.getProperty('x_dynat_ruxit.sync_field_name')] = relRunsKey;
 					relRunsItem['values'] = relRunsValues;
 					pl['items'].push(relRunsItem);
 					// now enter the relationship
@@ -331,7 +331,7 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 			// fill discovered host attributes
 			var values = {};
 			values['name'] = dyn.shortHostName(hosts[key]['displayName']);
-			values['correlation_id'] = key;
+			values[gs.getProperty('x_dynat_ruxit.sync_field_name')] = key;
 			values['os'] = extractOperatingSystem(p[i]['osType'], hosts[key]['osVersion']);
 			values['os_version'] = extractOperatingSystemVersion(p[i]['osType'], hosts[key]['osVersion']);;
 			values['cpu_type'] = hosts[key]['osArchitecture'];
@@ -375,8 +375,9 @@ function pushHostsAndProcesses(tagFilter, apiUrl, token, pgs, mid) {
 						// create a process group CI (x_dynat_ruxit_process_group)
 						var pItem = {};
 						pItem['className'] = 'x_dynat_ruxit_process_group';
-						pItem['values'] = { 'name' : pg['displayName'] , 'correlation_id' : pg['entityId'], 'operational_status' : '1' };
+						pItem['values'] = { 'name' : pg['displayName'] , 'operational_status' : '1' };
 						pItem['values']['comments'] = extractTags(pg['tags']);
+						pItem['values'][gs.getProperty('x_dynat_ruxit.sync_field_name')] = pg['entityId'];
 						var first = new Date(pg['firstSeenTimestamp']);
 						var last = new Date(pg['lastSeenTimestamp']);
 						pItem['values']['short_description'] = '';
@@ -479,14 +480,14 @@ if(gs.getProperty('x_dynat_ruxit.sync_cmdb') == 'true') {
         <sys_created_by>Admin</sys_created_by>
         <sys_created_on>2017-11-10 13:39:35</sys_created_on>
         <sys_id>6a609f52db52cf40190bd92b5e96191c</sys_id>
-        <sys_mod_count>357</sys_mod_count>
+        <sys_mod_count>359</sys_mod_count>
         <sys_name>Dynatrace CMDB Sync</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sysauto_script_6a609f52db52cf40190bd92b5e96191c</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-01-12 08:09:21</sys_updated_on>
+        <sys_updated_on>2019-03-12 13:26:07</sys_updated_on>
         <upgrade_safe>false</upgrade_safe>
     </sysauto_script>
 </record_update>

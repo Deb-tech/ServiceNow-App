@@ -182,9 +182,26 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 	}
 }
 
+/*
+ Find a CI from the CMDB with a given type and name.
+ */
+function cmdbLookup(type, name) {
+	if(type && name) {
+		if(type == 'HOST') {	
+			var dyn = new dynatrace();
+			hostName = dyn.shortHostName(name);
+			var lu = new GlideRecord("cmdb_ci_server"); 
+			if(lu.get('name', hostName)) {
+				return lu.getValue('sys_id');
+			}
+		}
+	}
+	return 0; // nothing found
+}
+
 // The new way of processing problem details without the need for backchannel
 function processProblemDetails(pDetails) {
-	gs.error("Wolfgang : YES YES");
+	var aff_cis = [];
 	// create the incident
 	srv = new GlideRecord("x_dynat_ruxit_problems"); 
 	srv.initialize();
@@ -201,25 +218,50 @@ function processProblemDetails(pDetails) {
 	
 	for(idx = 0; idx < pDetails['impactedEntities'].length; idx++) {
 		i_cis += pDetails['impactedEntities'][idx]['entity'];
-		i_ci_names += pDetails['impactedEntities'][idx]['type'] + ":" + pDetails['impactedEntities'][idx]['name'];
-		if(idx == pDetails['impactedEntities'].length-1) {
+		i_ci_names += pDetails['impactedEntities'][idx]['type'] + ':' + pDetails['impactedEntities'][idx]['name'];
+		if(idx < pDetails['impactedEntities'].length-1) {
 			i_cis += ',';
 			i_ci_names += ',';
 		}
+		
+		// apply CI mapping, if we have a host, we try to map it to a CMDB server 
+		if(pDetails['impactedEntities'][idx]['type'] == 'HOST') {
+			sys_id = cmdbLookup(pDetails['impactedEntities'][idx]['type'], pDetails['impactedEntities'][idx]['name']);
+			if(sys_id != 0) {
+				srv.setValue('configuration_item', sys_id);
+				aff_cis.push(sys_id);
+			}
+		}
 	}
-	
 	srv.setValue('impacted_cis', i_cis);
 	srv.setValue('impacted_ci_names', i_ci_names);
 	srv.setValue('environment', pDetails['environmentName']);
 	srv.update();
+	
+	// now add all affected CIs
+	for(var a in aff_cis) {
+		// additionally add it to affected CI table
+		var cis_aff = new GlideRecord("x_dynat_ruxit_affectedcis"); 
+		cis_aff.initialize();
+		cis_aff.setValue('problem', '' + pDetails['pid']);			
+		cis_aff.setValue('affected_ci', aff_cis[a]);
+		cis_aff.insert();
+	}
 }
 
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 	var requestBody = request.body; 
-	
-	gs.error("TOBIAS: " + requestBody.dataString);
-	
-	if(requestBody.data['impactedEntities']) {
+	// first check if its a try run
+	if(isTestNotification(requestBody.data)) {
+		// create a test run incident
+		srv = new GlideRecord("x_dynat_ruxit_problems"); 
+		srv.initialize();
+		srv.setValue('number', 0 ); 
+		srv.setValue('problem_id', "" + Math.random());  
+		srv.setValue('problem_title', "Test incident");  
+		srv.update();
+	}
+	else if(requestBody.data['impactedEntities']) {
 		processProblemDetails(requestBody.data);
 	}
 	else { // old way, should get rid of this code when Dynatrace release version 165 is rolled out globally
@@ -241,7 +283,7 @@ function processProblemDetails(pDetails) {
 
 			var apiToken = environment['api_token'].getDecryptedValue();
 			// check if we find the environment id within one of the configured environments
-			if(requestBody.data['url'].contains(environmentId) || isTestNotification(requestBody.data)) {
+			if(requestBody.data['url'].contains(environmentId)) {
 				// now start to fetch the problem details
 				fetchProblemDetails(apiUrl, apiToken, mid, requestBody.data);
 				found = true;
@@ -266,14 +308,14 @@ function processProblemDetails(pDetails) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-06-03 08:51:21</sys_created_on>
         <sys_id>4c55e2dd4fbbd600dbec7bb28110c7da</sys_id>
-        <sys_mod_count>198</sys_mod_count>
+        <sys_mod_count>218</sys_mod_count>
         <sys_name>Problem</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ws_operation_4c55e2dd4fbbd600dbec7bb28110c7da</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-03-05 07:28:15</sys_updated_on>
+        <sys_updated_on>2019-03-12 16:15:08</sys_updated_on>
         <web_service_definition display_value="Problem Notification">37c462dd4fbbd600dbec7bb28110c7ac</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
