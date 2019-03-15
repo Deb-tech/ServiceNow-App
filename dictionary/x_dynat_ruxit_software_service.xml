@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
-    <element extends="cmdb_ci" label="Software service" max_length="40" name="x_dynat_ruxit_software_service" sizeclass="388" type="collection">
+    <element extends="cmdb_ci" label="Software service" max_length="40" name="x_dynat_ruxit_software_service" sizeclass="979" type="collection">
         <element attributes="no_sort=true,slushbucket_ref_no_expand=true,edge_encryption_enabled=true" label="Service technology types" max_length="4000" name="service_technology_types" type="glide_list"/>
     </element>
 </database>

@@ -54,10 +54,6 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 	srv = new GlideRecord("x_dynat_ruxit_problems"); 
 	srv.initialize();
 	
-	// open CI to MEID mapping table
-	var mapping = new GlideRecord("x_dynat_ruxit_ci_mapping"); 
-	mapping.initialize(); 
-	
 	srv.setValue('number', problem['nr'] ); 
 	srv.setValue('problem_id', problemid);  
 	srv.setValue('problem_title', problem['title']);  
@@ -66,13 +62,7 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 	srv.setValue('impact_level', problem['impact']);
 	srv.setValue('details', problem['details'] );  
 	srv.setValue('tags', '' + problem['tags'] );  
-	
-	// if this is a test notification it doesn't make any
-	// sense to reach out to the tenant for problem details
-	if (isTestNotification(problem)) {
-		srv.update();
-		return;
-	}
+	srv.update();
 	
 	// fetch problem details
 	var restMessage = new sn_ws.RESTMessageV2();
@@ -109,38 +99,10 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 	status = pRes.getStatusCode();
 	gs.debug("Dynatrace app fetch problem status code: " + status);
 	var pDetails;
-	// in case we need to attach more than one affected CI with one incident we have to
-	// fill the CIs Affected (task_ci) table 
-	if(status == 200) {
-		pDetails = new global.JSON().decode(pRes.getBody());
-		
-		srv.setValue('company', pDetails.result.rankedEvents[0].entityId);
-		
-		for(var x = 0; x < pDetails.result.rankedEvents.length; x++) {
-			mapping.addQuery('dynatrace_meid', pDetails.result.rankedEvents[x].entityId);
-			mapping.query();
-			if(mapping.next()) {
-				srv.setValue('company', mapping.getValue('company'));
-				srv.setValue('configuration_item', mapping.getValue('sn_configuration_item'));
-				srv.setValue('caller', mapping.getValue('caller'));
-				srv.setValue('assignment_group', mapping.getValue('assignment_group'));
-				srv.setValue('urgency', mapping.getValue('urgency'));
-				srv.setValue('impact', mapping.getValue('impact'));
-				srv.setValue('category', mapping.getValue('category'));
-				srv.setValue('subcategory', mapping.getValue('subcategory'));
-				break;
-			}
-		}
-	}
-	else {
-		gs.error("Dynatrace app failed to fetch problem details with HTTP code: " + status);
-		gs.error("Dynatrace app failed to fetch problem details for: " + apiUrl);
-	}
-	
-	srv.update();
 	
 	// only add affected CIs if we open a problem
 	if(status == 200) {
+		pDetails = new global.JSON().decode(pRes.getBody());	
 		// open CIs affected table
 		var cis_aff = new GlideRecord("x_dynat_ruxit_affectedcis"); 
 		// impacted_cis
@@ -151,22 +113,10 @@ function fetchProblemDetails(url, apiToken, mid, problem) {
 				if(y < pDetails.result.rankedEvents.length - 1) {
 					imCis += ',';
 				}
-				// query for CI reference and store in table
-				// open CI to MEID mapping table
-				var m = new GlideRecord("x_dynat_ruxit_ci_mapping"); 
-				m.initialize();
-				m.addQuery('dynatrace_meid', pDetails.result.rankedEvents[y].entityId);
-				m.query();
-				if(m.next()) {
-					cis_aff.initialize();
-					cis_aff.setValue('problem', '' + problemid);
-					cis_aff.setValue('affected_ci', m.getValue('sn_configuration_item'));
-					cis_aff.insert();
-				}
-
+				
 				// query for synced service, application or host CMDB CIs 
 				var index = new GlideRecord("cmdb_ci"); 
-				if(index.get('correlation_id', pDetails.result.rankedEvents[y].entityId)) {
+				if(index.get(gs.getProperty('x_dynat_ruxit.sync_field_name'), pDetails.result.rankedEvents[y].entityId)) {
 					cis_aff.initialize();
 					cis_aff.setValue('problem', '' + problemid);
 					cis_aff.setValue('affected_ci', index.getValue('sys_id'));
@@ -308,14 +258,14 @@ function processProblemDetails(pDetails) {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2016-06-03 08:51:21</sys_created_on>
         <sys_id>4c55e2dd4fbbd600dbec7bb28110c7da</sys_id>
-        <sys_mod_count>218</sys_mod_count>
+        <sys_mod_count>219</sys_mod_count>
         <sys_name>Problem</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ws_operation_4c55e2dd4fbbd600dbec7bb28110c7da</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-03-12 16:15:08</sys_updated_on>
+        <sys_updated_on>2019-03-15 15:57:31</sys_updated_on>
         <web_service_definition display_value="Problem Notification">37c462dd4fbbd600dbec7bb28110c7ac</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
