@@ -10,12 +10,64 @@
 
 dynatrace.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 	
+	/* Add calls relationship of the given application service with another application service.
+	*/
+	addServiceCallsRelationship: function (serviceSysId, calledServiceDynatraceID) {
+		gs.debug("Set called relationship for application service: " + serviceSysId + " to: " + calledServiceDynatraceID);
+		var ci = new GlideRecord('cmdb_ci_service_discovered');
+		ci.addQuery('correlation_id', calledServiceDynatraceID); 
+		ci.query();
+		if(ci.next()) { 
+			// cmdb_rel_ci
+			var ci_rel = new GlideRecord('cmdb_rel_ci');
+			ci_rel.addQuery('parent', serviceSysId); 
+			ci_rel.addQuery('child', ci.getValue('sys_id')); 
+			ci_rel.addQuery('type', '1a9cb166f1571100a92eb60da2bce5c5'); 
+			ci_rel.query();
+			if(!ci_rel.next()) {
+				// parent, child, type
+				ci_rel.setValue('parent', serviceSysId); 
+				ci_rel.setValue('child', ci.getValue('sys_id')); 
+				ci_rel.setValue('type', '1a9cb166f1571100a92eb60da2bce5c5'); 
+				ci_rel.update();
+			}
+		}		
+	},
+	
+	
+	/* Adds a given application service to a given service group
+	   - creates the service group if it not exists
+	   - assigns the service to its service group	
+	*/
+	setServiceGroup: function (serviceSysId, groupName) {
+		// get service group, or create new one
+		var ser_groups = new GlideRecord('cmdb_ci_service_group');
+		ser_groups.addQuery('name', groupName); 
+		ser_groups.query();
+		if(!ser_groups.next()) { // if group does not exist > create it
+			ser_groups.initialize();
+			ser_groups.setValue('name', groupName); 
+			ser_groups.update();
+		}
+		// add service to service group
+		var gr_mem = new GlideRecord('sa_service_group_member');
+		gr_mem.addQuery('service_group', ser_groups.getValue('sys_id')); 
+		gr_mem.addQuery('service', serviceSysId); 
+		gr_mem.query();
+		if(!gr_mem.next()) { // if service is not already in group, create group membership entry
+			gr_mem.initialize();
+			gr_mem.setValue('service_group', ser_groups.getValue('sys_id')); 
+			gr_mem.setValue('service', serviceSysId); 
+			gr_mem.update();
+		}
+	},
+	
 	/* Strips a potental fuly qualified host name from its domain and returns
 	   the short host name in lower case letters (which is the default from ServiceNow.
 	*/
 	shortHostName: function (hostName) {
 		if(!hostName.contains('.')) {
-			return hostName;
+			return hostName.toLowerCase();
 		}
 		return hostName.substring(0, hostName.indexOf(".")).toLowerCase(); // return short host name without domain part
 	},
@@ -56,7 +108,7 @@ dynatrace.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		}
 		// second check if there exists a discovery source 'DYNATRACE' (sys_choice)
 		var ds = new GlideRecord('sys_choice'); 
-		ds.addQuery('value','DYNATRACE');
+		ds.addQuery('value',gs.getProperty('x_dynat_ruxit.discovery_source'));
 		ds.query(); 
 		if (ds.next()) { 
 			if(ds.getValue("label") != 'DYNATRACE') {
@@ -70,7 +122,7 @@ dynatrace.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 			}
 		}
 		else {
-			results.errors.push("Discovery source 'DYNATRACE' not found!");
+			results.errors.push("Discovery source " + gs.getProperty('x_dynat_ruxit.discovery_source') + " not found!");
 		}
 		// third check the connectivity for all configured environments
 		// read all configured environments and sync the components
@@ -109,20 +161,129 @@ dynatrace.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 		
 		// return all errors
         return JSON.stringify(results);         
+	},
+	
+	/** Function that maps the OneAgent provided os type and version to CMDB os types.
+	  */
+	extractOperatingSystem: function (osType, osString) {
+		var hostTypes = {'LINUX' : 'Linux', 'WINDOWS' : 'Windows', 'AIX' : 'AIX'};
+		if(osType == 'WINDOWS') {
+			var wStr = "Windows ";
+			if(osString.indexOf('2000') != -1) {
+				wStr += "2000 ";
+			}
+			else if(osString.indexOf('2003') != -1) {
+				wStr += "2003 ";
+			}
+			else if(osString.indexOf('2008') != -1) {
+				wStr += "2008 ";
+			}
+			else if(osString.indexOf('2012') != -1) {
+				wStr += "2012 ";
+			}
+			else if(osString.indexOf('2016') != -1) {
+				wStr += "2016 ";
+			}
+			else if(osString.indexOf('2019') != -1) {
+				wStr += "2019 ";
+			}
+
+			if(osString.toLowerCase().indexOf('advanced') != -1) {
+				wStr += "Advanced Server";
+			}
+			else if(osString.toLowerCase().indexOf('datacenter') != -1 && osString.toLowerCase().indexOf('server') != -1) {
+				wStr += "Datacenter Server";
+			}
+			else if(osString.toLowerCase().indexOf('datacenter') != -1) {
+				wStr += "Datacenter";
+			}
+			else if(osString.toLowerCase().indexOf('standard') != -1) {
+				wStr += "Standard";
+			}
+			else if(osString.toLowerCase().indexOf('web') != -1) {
+				wStr += "Web";
+			}
+			else if(osString.toLowerCase().indexOf('enterprise') != -1) {
+				wStr += "Enterprise";
+			}
+			else if(osString.toLowerCase().indexOf('professional') != -1) {
+				wStr += "Professional";
+			}
+			else if(osString.toLowerCase().indexOf('server') != -1) {
+				wStr += "Server";
+			}
+
+			return wStr;
+		}
+		else if(osType == 'LINUX') {
+			if(osString.toLowerCase().indexOf('ubuntu') != -1) {
+				return 'Linux Ubuntu';
+			}
+			else if(osString.toLowerCase().indexOf('red hat') != -1) {
+				return 'Linux Red Hat';
+			}
+			else if(osString.toLowerCase().indexOf('core os') != -1) {
+				return 'Linux CoreOS';
+			}
+			else if(osString.toLowerCase().indexOf('fedora') != -1) {
+				return 'Linux Fedora';
+			}
+			else if(osString.toLowerCase().indexOf('suse') != -1) {
+				return 'Linux SuSe';
+			}
+		} 
+		return hostTypes[osType];
+	},
+	
+	// Mapping of OneAgent provided os string to CMDB os version.
+	extractOperatingSystemVersion: function(osType, osString) {
+		return osString;
+	},
+	
+	// Choose an IP for a list of ips
+	extractIp: function(ipAddresses) {
+		if(ipAddresses) {
+			for (i = 0; i < ipAddresses.length; i++)
+			{
+				// return first non IPv6
+				if(ipAddresses[i].indexOf(":") === -1) {  
+					return ipAddresses[i];
+				}	
+			}
+		}
+		else {
+			return "";
+		}
+	},
+	
+	isTechnology: function(process, tech) {
+		if(process['softwareTechnologies']) {
+			for (l = 0; l < process['softwareTechnologies'].length; l++)
+			{
+				if(process['softwareTechnologies'][l]['type'] === tech) {  
+					return true;
+				}	
+			}
+			return false;
+		}
+		else {
+			return false;
+		}
 	}
+		
 });
 ]]></script>
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>wolfgang</sys_created_by>
         <sys_created_on>2018-10-31 14:51:30</sys_created_on>
         <sys_id>f29ce3acdb692700190bd92b5e9619f3</sys_id>
-        <sys_mod_count>60</sys_mod_count>
+        <sys_mod_count>62</sys_mod_count>
         <sys_name>dynatrace</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_script_include_f29ce3acdb692700190bd92b5e9619f3</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-03-12 14:05:25</sys_updated_on>
+        <sys_updated_on>2019-03-16 17:37:06</sys_updated_on>
     </sys_script_include>
 </record_update>
