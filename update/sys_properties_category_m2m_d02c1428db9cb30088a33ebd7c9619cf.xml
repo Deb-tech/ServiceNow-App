@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties_category_m2m">
     <sys_properties_category_m2m action="INSERT_OR_UPDATE">
         <category display_value="Dynatrace Properties">08c11a014ff7d600dbec7bb28110c74a</category>
-        <order>200</order>
-        <property display_value="x_dynat_ruxit.logging.verbosity" name="x_dynat_ruxit.logging.verbosity">ce9b95bedb2d4b00d5e7572e5e961997</property>
+        <order>500</order>
+        <property display_value="x_dynat_ruxit.import_application_services" name="x_dynat_ruxit.import_application_services">357bd0e4db9cb30088a33ebd7c96198d</property>
         <sys_class_name>sys_properties_category_m2m</sys_class_name>
-        <sys_created_by>wolfgang</sys_created_by>
-        <sys_created_on>2018-10-18 08:24:07</sys_created_on>
-        <sys_id>fea9179cdb99ab40190bd92b5e961907</sys_id>
-        <sys_mod_count>1</sys_mod_count>
-        <sys_name>x_dynat_ruxit.logging.verbosity.Dynatrace Properties</sys_name>
+        <sys_created_by>admin2</sys_created_by>
+        <sys_created_on>2019-03-16 16:22:52</sys_created_on>
+        <sys_id>d02c1428db9cb30088a33ebd7c9619cf</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_dynat_ruxit.import_application_services.Dynatrace Properties</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
-        <sys_update_name>sys_properties_category_m2m_fea9179cdb99ab40190bd92b5e961907</sys_update_name>
+        <sys_update_name>sys_properties_category_m2m_d02c1428db9cb30088a33ebd7c9619cf</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-03-16 16:22:51</sys_updated_on>
+        <sys_updated_on>2019-03-16 16:22:52</sys_updated_on>
     </sys_properties_category_m2m>
 </record_update>
