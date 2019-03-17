@@ -48,6 +48,8 @@ function updateUI(response) {
 						<h3>Please check following mandatory settings before contacting Dynatrace support:</h3>
 						<h3>1. Plugin 'Configuration Management for Scoped Apps' is active.</h3>
 						<h3>2. You defined a discovery_source 'DYNATRACE'</h3>
+						<h3>3. For import of application services, following global script include is mandatory:</h3>
+						<h3><a href="http://www.orf.at">Download script</a></h3>
 					</td>
 				</tr>
 				<tr>
@@ -96,13 +98,13 @@ function updateUI(response) {
         <sys_created_by>wolfgang</sys_created_by>
         <sys_created_on>2018-10-30 15:16:30</sys_created_on>
         <sys_id>49686e58db69e300190bd92b5e96195c</sys_id>
-        <sys_mod_count>44</sys_mod_count>
+        <sys_mod_count>51</sys_mod_count>
         <sys_name>support</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sys_ui_page_49686e58db69e300190bd92b5e96195c</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2018-11-08 15:26:41</sys_updated_on>
+        <sys_updated_on>2019-03-17 09:43:38</sys_updated_on>
     </sys_ui_page>
 </record_update>
