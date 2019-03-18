@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sysauto_script">
     <sysauto_script action="INSERT_OR_UPDATE">
-        <active>false</active>
+        <active>true</active>
         <condition/>
         <conditional>false</conditional>
         <name>Dynatrace CMDB Sync</name>
@@ -8,7 +8,7 @@
         <run_as_tz/>
         <run_dayofmonth>1</run_dayofmonth>
         <run_dayofweek>1</run_dayofweek>
-        <run_period>1970-01-01 00:10:00</run_period>
+        <run_period>1970-01-01 01:00:00</run_period>
         <run_start>2017-11-10 13:32:02</run_start>
         <run_time>1969-12-31 23:01:00</run_time>
         <run_type>periodically</run_type>
@@ -61,7 +61,6 @@ function addRelationship(parentDTid, childDTid, type) {
 }
 
 function pullApplicationProcessesForServer(hostId, mid, token) {
-	//gs.debug("Fetch processes for: " + hostId);
 	var restMessage = new sn_ws.RESTMessageV2();
 	if(mid) {
 		restMessage.setMIDServer(mid);
@@ -84,7 +83,13 @@ function pullApplicationProcessesForServer(hostId, mid, token) {
 						item['className'] = appServerMapping[appServers[j]];
 						// fill discovered host attributes
 						var values = {};
-						values['name'] = p[x]['discoveredName'];
+						
+						if (gs.getProperty('x_dynat_ruxit.use_customized_names') == 'true') {
+							values['name'] = p[x]['displayName'];
+						}
+						else {
+							values['name'] = p[x]['discoveredName'];
+						}
 						values[gs.getProperty('x_dynat_ruxit.sync_field_name')] = p[x]['entityId'];
 						if(p[x]['metadata'] && p[x]['metadata']['executablePaths'] && p[x]['metadata']['executablePaths'].length > 0) {
 							values['running_process_command'] = p[x]['metadata']['executablePaths'][0];
@@ -114,7 +119,7 @@ function pullApplicationProcessesForServer(hostId, mid, token) {
 		}
 	}
 	else {
-		gs.error("Dynatrace Service Maps app failed to processes from host: " + hostId + "  HTTP status: " + status);
+		gs.error("Dynatrace CI import failed to processes from host: " + hostId + "  HTTP status: " + status);
 	}
 } 
 
@@ -149,43 +154,51 @@ function createUpdateServers(tagFilter, apiUrl, token, mid) {
 		var p = new global.JSON().decode(response.getBody());	
 		gs.debug("Dynatrace hosts : " + p.length);
 		for (var i = 0; i < p.length; i++) { 
-			var key = p[i]['entityId'];
-			hosts[key] = p[i];
-			var item = {};
-			item['className'] = hostTypes[p[i]['osType']];
-			// fill discovered host attributes
-			var values = {};
-			values['name'] = dyn.shortHostName(hosts[key]['discoveredName']);
-			values[gs.getProperty('x_dynat_ruxit.sync_field_name')] = key;
-			values['os'] = dyn.extractOperatingSystem(p[i]['osType'], hosts[key]['osVersion']);
-			values['os_version'] = dyn.extractOperatingSystemVersion(p[i]['osType'], hosts[key]['osVersion']);
-			values['cpu_type'] = hosts[key]['osArchitecture'];
-			values['cpu_core_count'] = hosts[key]['cpuCores'];
-			values['operational_status'] = "1";
-			values['ip_address'] = dyn.extractIp(hosts[key]['ipAddresses']);
-			values['comments'] = extractTags(hosts[key]['tags']);
-			var first = new Date(hosts[key]['firstSeenTimestamp']);
-			var last = new Date(hosts[key]['lastSeenTimestamp']);
-			values['short_description'] = '';
-			values['first_discovered'] = first.toISOString().replace('T', ' ');
-			values['last_discovered'] = last.toISOString().replace('T', ' ');
-			item['values'] = values;
-			
-			// add new item to payload and store its payload index
-			pl['items'].push(item);	
-			itemIndex[key] = pl['items'].length - 1; // remember the itemIndex for that Dynatrace id
-			
-			if(gs.getProperty('x_dynat_ruxit.import_app_servers') == 'true') {
-				pullApplicationProcessesForServer(key, mid, token);
+			try {
+				var key = p[i]['entityId'];
+				hosts[key] = p[i];
+				var item = {};
+				item['className'] = hostTypes[p[i]['osType']];
+				// fill discovered host attributes
+				var values = {};
+				if (gs.getProperty('x_dynat_ruxit.use_customized_names') == 'true') {
+					values['name'] = dyn.shortHostName(hosts[key]['displayName']);
+				}
+				else {
+					values['name'] = dyn.shortHostName(hosts[key]['discoveredName']);
+				}
+				values[gs.getProperty('x_dynat_ruxit.sync_field_name')] = key;
+				values['os'] = dyn.extractOperatingSystem(p[i]['osType'], hosts[key]['osVersion']);
+				values['os_version'] = dyn.extractOperatingSystemVersion(p[i]['osType'], hosts[key]['osVersion']);
+				values['cpu_type'] = hosts[key]['osArchitecture'];
+				values['cpu_core_count'] = hosts[key]['cpuCores'];
+				values['operational_status'] = "1";
+				values['ip_address'] = dyn.extractIp(hosts[key]['ipAddresses']);
+				values['comments'] = extractTags(hosts[key]['tags']);
+				var first = new Date(hosts[key]['firstSeenTimestamp']);
+				var last = new Date(hosts[key]['lastSeenTimestamp']);
+				values['short_description'] = '';
+				values['first_discovered'] = first.toISOString().replace('T', ' ');
+				values['last_discovered'] = last.toISOString().replace('T', ' ');
+				item['values'] = values;
+
+				// add new item to payload and store its payload index
+				pl['items'].push(item);	
+				itemIndex[key] = pl['items'].length - 1; // remember the itemIndex for that Dynatrace id
+
+				if(gs.getProperty('x_dynat_ruxit.import_app_servers') == 'true') {
+					pullApplicationProcessesForServer(key, mid, token);
+				}
+
+				// send the result to the identification and reconciliation Engine
+				var input = new global.JSON().encode(pl);
+				//gs.debug("Dynatrace host payload: " + global.JSON.stringify(pl));
+				var output = sn_cmdb.IdentificationEngine.createOrUpdateCI(gs.getProperty('x_dynat_ruxit.discovery_source'), input);	
+				// check for errors and save the sys_ids
+				processIdentificationResult(output, pl['items']);
+			} catch(err) {
+				gs.error("Dynatrace exception during import of host: " + p[i]['displayName']);
 			}
-			
-			// send the result to the identification and reconciliation Engine
-			var input = new global.JSON().encode(pl);
-			//gs.debug("Dynatrace host payload: " + global.JSON.stringify(pl));
-			var output = sn_cmdb.IdentificationEngine.createOrUpdateCI(gs.getProperty('x_dynat_ruxit.discovery_source'), input);	
-			// check for errors and save the sys_ids
-			processIdentificationResult(output, pl['items']);
-			
 			// empty payload for next environment
 			pl['items'] = [];
 			pl['relations'] = [];
@@ -193,7 +206,7 @@ function createUpdateServers(tagFilter, apiUrl, token, mid) {
 		}
 	}	
 	else {
-		gs.error("Dynatrace Service Maps app failed to pull hosts with HTTP status: " + status);
+		gs.error("Dynatrace CI import failed to pull hosts with HTTP status: " + status);
 	}
 }
 
@@ -218,7 +231,12 @@ function createUpdateServices(tagFilter, apiUrl, token, mid) {
 			var appService = {};
 			appService[gs.getProperty('x_dynat_ruxit.sync_field_name')] = key; 
 			appService['discovery_source'] = gs.getProperty('x_dynat_ruxit.discovery_source'); 
-			appService['name'] = p[l]['displayName']; 
+			if (gs.getProperty('x_dynat_ruxit.use_customized_names') == 'true') {
+				appService['name'] = p[l]['displayName'];
+			}
+			else {
+				appService['name'] = p[l]['discoveredName'];  
+			}
 			appService['operational_status'] = 1; 
 			var first = new Date(p[l]['firstSeenTimestamp']);
 			var last = new Date(p[l]['lastSeenTimestamp']);
@@ -264,16 +282,16 @@ while (environment.next()) {
 	var apiUrl = dyn.urlClean(environment['dynatrace_environment_api_url']);
 	var isActive = "" + environment['active'];
 	if (isActive == "false") {
-		gs.debug("Skipping Dynatrace service map sync for environment (not active): " + apiUrl);
+		gs.debug("Skipping Dynatrace CI import for environment (not active): " + apiUrl);
 		continue;
 	}
 
-	gs.debug("Dynatrace Service Map sync for environment: " + apiUrl);
+	gs.debug("Dynatrace CI import for environment: " + apiUrl);
 	var apiToken = environment['api_token'].getDecryptedValue();
 	var mid = null;
 	if(environment['mid']) {
 		mid = environment['mid'].name;
-		gs.debug("Dynatrace uses a user defined MID server: " + mid);
+		gs.debug("Dynatrace uses a configured MID server: " + mid);
 	}
 	var tagString = "";
 	if(environment['filter_tags']) {
@@ -286,7 +304,7 @@ while (environment.next()) {
 			tagUrlParam += '&tag=' + encodeURI(tags[i].trim());
 		} 
 	}
-	gs.debug("Dynatrace service map sync filter tags: " + tagUrlParam);
+	gs.debug("Dynatrace CI import filter tags: " + tagUrlParam);
 	// create hosts and application servers
 	if(gs.getProperty('x_dynat_ruxit.import_servers') == 'true') {
 		createUpdateServers(tagUrlParam, apiUrl, apiToken, mid);
@@ -301,14 +319,14 @@ while (environment.next()) {
         <sys_created_by>Admin</sys_created_by>
         <sys_created_on>2017-11-10 13:39:35</sys_created_on>
         <sys_id>6a609f52db52cf40190bd92b5e96191c</sys_id>
-        <sys_mod_count>365</sys_mod_count>
+        <sys_mod_count>376</sys_mod_count>
         <sys_name>Dynatrace CMDB Sync</sys_name>
         <sys_package display_value="Dynatrace CMDB Integration" source="x_dynat_ruxit">9f77f7a94f9f1200dbec7bb28110c7c2</sys_package>
         <sys_policy/>
         <sys_scope display_value="Dynatrace CMDB Integration">9f77f7a94f9f1200dbec7bb28110c7c2</sys_scope>
         <sys_update_name>sysauto_script_6a609f52db52cf40190bd92b5e96191c</sys_update_name>
         <sys_updated_by>admin2</sys_updated_by>
-        <sys_updated_on>2019-03-16 17:35:27</sys_updated_on>
+        <sys_updated_on>2019-03-18 14:26:01</sys_updated_on>
         <upgrade_safe>false</upgrade_safe>
     </sysauto_script>
 </record_update>
