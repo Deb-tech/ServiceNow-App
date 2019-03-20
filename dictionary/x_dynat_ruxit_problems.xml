@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element extends="sys_import_set_row" label="Problems" max_length="40" name="x_dynat_ruxit_problems" type="collection">
-        <element label="Category" max_length="255" name="category" type="string"/>
         <element attributes="edge_encryption_enabled=true" label="Configuration Item" max_length="32" name="configuration_item" reference="cmdb_ci" type="reference"/>
         <element attributes="edge_encryption_enabled=true" label="Problem Details" max_length="4000" name="details" type="html"/>
         <element label="Environment" max_length="255" name="environment" type="string_full_utf8"/>
@@ -13,7 +12,6 @@
         <element label="Problem Title" max_length="250" name="problem_title" type="string_full_utf8"/>
         <element label="Problem URL" max_length="1024" name="problem_url" type="url"/>
         <element label="Tags" max_length="2000" name="tags" type="string_full_utf8"/>
-        <element attributes="edge_encryption_enabled=true" label="Urgency" max_length="40" name="urgency" type="integer"/>
         <index name="index">
             <element name="configuration_item"/>
         </index>
